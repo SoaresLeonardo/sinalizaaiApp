@@ -1,8 +1,8 @@
 import { zodResolver } from '@hookform/resolvers/zod';
+import { FormProps, schema } from './schema';
 import { useForm } from 'react-hook-form';
-import { FormProps, UseUserFormProps } from './types';
 
-export const useUserForm = ({ schema, urlApi }: UseUserFormProps) => {
+export const useUserSignup = () => {
   const {
     register,
     handleSubmit,
@@ -16,15 +16,15 @@ export const useUserForm = ({ schema, urlApi }: UseUserFormProps) => {
     }
   });
 
-  const userData = (data: FormProps) => {
-    console.log(data, urlApi);
+  const signupUserData = (data: FormProps) => {
+    console.log(data);
     // axios - API
   };
 
   return {
     register,
     handleSubmit,
-    errors,
-    userData
+    signupUserData,
+    errors
   };
 };

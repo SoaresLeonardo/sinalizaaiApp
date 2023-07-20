@@ -2,15 +2,11 @@
 
 import Button from '@/components/Button';
 import Input from '@/components/Input';
-import { useUserForm } from '@/hooks/user';
-import { schema } from './user/index';
+import { useUserSignup } from '@/hooks/user/signup';
 import Link from 'next/link';
 
 export default function Signup() {
-  const { register, errors, handleSubmit, userData } = useUserForm({
-    schema,
-    urlApi: '/signup'
-  });
+  const { register, handleSubmit, signupUserData, errors } = useUserSignup();
   return (
     <div className="h-screen flex items-center justify-center">
       <div className="w-full mx-auto flex items-center justify-center">
@@ -23,7 +19,7 @@ export default function Signup() {
           </div>
           <form
             className="w-full max-w-sm mt-10 space-y-12"
-            onSubmit={handleSubmit(userData)}
+            onSubmit={handleSubmit(signupUserData)}
           >
             <Input
               placeholder="Por favor, insira seu e-mail"
