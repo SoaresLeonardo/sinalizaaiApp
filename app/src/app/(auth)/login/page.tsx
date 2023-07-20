@@ -8,10 +8,14 @@ import Image from 'next/image';
 
 import Button from '@/components/Button';
 import Input from '@/components/Input';
-import { useLoginUserForm } from './user';
+import { useUserForm } from '@/hooks/user';
+import { schema } from './user/schema';
 
 export default function Login() {
-  const { register, errors, handleSubmit, loginUser } = useLoginUserForm();
+  const { register, errors, handleSubmit, loginUser } = useUserForm({
+    schema,
+    urlApi: '/login'
+  });
 
   return (
     <div className="lg:h-screen flex items-center justify-center py-4">
@@ -48,7 +52,7 @@ export default function Login() {
               startAdorment={<LockKey size={25} />}
               {...register('password')}
             />
-            <Button rounded className="w-full" type="submit">
+            <Button rounded className="w-full" type="submit" variant="primary">
               Fazer login
             </Button>
           </form>
