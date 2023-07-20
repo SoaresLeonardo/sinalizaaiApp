@@ -10,5 +10,3 @@ export const schema = z.object({
     .nonempty('Voçê precisa inserir uma senha.')
     .min(6, 'A senha precisa ter pelo menos 6 caracteres')
 });
-
-export type FormProps = z.infer<typeof schema>;
