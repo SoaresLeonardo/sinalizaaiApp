@@ -16,7 +16,7 @@ export const useUserForm = ({ schema, urlApi }: UseUserFormProps) => {
     }
   });
 
-  const loginUser = (data: FormProps) => {
+  const userData = (data: FormProps) => {
     console.log(data, urlApi);
     // axios - API
   };
@@ -25,6 +25,6 @@ export const useUserForm = ({ schema, urlApi }: UseUserFormProps) => {
     register,
     handleSubmit,
     errors,
-    loginUser
+    userData
   };
 };

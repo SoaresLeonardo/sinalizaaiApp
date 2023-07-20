@@ -12,7 +12,7 @@ import { useUserForm } from '@/hooks/user';
 import { schema } from './user/schema';
 
 export default function Login() {
-  const { register, errors, handleSubmit, loginUser } = useUserForm({
+  const { register, errors, handleSubmit, userData } = useUserForm({
     schema,
     urlApi: '/login'
   });
@@ -32,7 +32,7 @@ export default function Login() {
           </div>
           <form
             className="w-full max-w-sm mt-10 space-y-12"
-            onSubmit={handleSubmit(loginUser)}
+            onSubmit={handleSubmit(userData)}
           >
             <Input
               placeholder="Por favor, insira seu e-mail"
