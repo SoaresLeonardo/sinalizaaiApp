@@ -1,8 +1,11 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { FormProps, schema } from './schema';
 import { useForm } from 'react-hook-form';
+import { useContext } from 'react';
+import { AuthContext } from '@/context/AuthContext';
 
-export const useUserSignup = () => {
+export const useSigninUser = () => {
+  const { signIn } = useContext(AuthContext);
   const {
     register,
     handleSubmit,
@@ -16,15 +19,15 @@ export const useUserSignup = () => {
     }
   });
 
-  const signupUserData = (data: FormProps) => {
-    console.log(data);
+  const signinUserData = async (data: FormProps) => {
+    await signIn(data);
     // axios - API
   };
 
   return {
     register,
     handleSubmit,
-    signupUserData,
+    signinUserData,
     errors
   };
 };

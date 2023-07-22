@@ -8,10 +8,10 @@ import Image from 'next/image';
 
 import Button from '@/components/Button';
 import Input from '@/components/Input';
-import { useUserLogin } from '@/hooks/user/login';
+import { useSigninUser } from '@/hooks/user/signin';
 
-export default function Login() {
-  const { register, errors, handleSubmit, loginUserData } = useUserLogin();
+export default function Signin() {
+  const { register, errors, handleSubmit, signinUserData } = useSigninUser();
 
   return (
     <div className="lg:h-screen flex items-center justify-center py-4">
@@ -28,7 +28,7 @@ export default function Login() {
           </div>
           <form
             className="w-full max-w-sm mt-10 space-y-12"
-            onSubmit={handleSubmit(loginUserData)}
+            onSubmit={handleSubmit(signinUserData)}
           >
             <Input
               placeholder="Por favor, insira seu e-mail"
