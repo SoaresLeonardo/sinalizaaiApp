@@ -24,3 +24,14 @@ export async function signInRequest(data: SignInRequestData) {
     }
   };
 }
+
+export async function recoverUserInformation() {
+  await delay();
+
+  return {
+    token: '3ceaf1a5-064a-4f95-90b6-e682e2f86aa8',
+    user: {
+      email: 'Leonardo@gmail.com'
+    }
+  };
+}

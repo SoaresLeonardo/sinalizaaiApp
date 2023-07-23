@@ -1,18 +1,20 @@
+import { GetItemCookies } from '@/Utils/getTokenCookies';
 import axios from 'axios';
-import { parseCookies } from 'nookies';
-
-const { 'SinalizaAi.token': token } = parseCookies();
 
 export const api = axios.create({
-  baseURL: 'http://localhost/3333'
+  baseURL: 'https://api.escuelajs.co/api/v1/'
 });
 
-api.interceptors.request.use((config) => {
-  console.log(config);
+api.interceptors.request.use((request) => {
+  const headers = request.headers ?? {};
 
-  return config;
+  const token = GetItemCookies('SinalizaAi.token');
+
+  if (token) {
+    headers['Authorization'] = `Bearer ${token}`;
+  }
+
+  request.headers = headers;
+
+  return request;
 });
-
-if (token) {
-  api.defaults.headers['Authorization'] = `Bearer ${token}`;
-}

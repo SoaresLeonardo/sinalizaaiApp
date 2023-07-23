@@ -1,11 +1,9 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { FormProps, schema } from './schema';
 import { useForm } from 'react-hook-form';
-import { useContext } from 'react';
-import { AuthContext } from '@/context/AuthContext';
+import { useAuth } from '@/hooks/auth';
 
 export const useSigninUser = () => {
-  const { signIn } = useContext(AuthContext);
   const {
     register,
     handleSubmit,
@@ -19,8 +17,14 @@ export const useSigninUser = () => {
     }
   });
 
+  const { signIn } = useAuth();
+
   const signinUserData = async (data: FormProps) => {
-    await signIn(data);
+    try {
+      await signIn(data);
+    } catch (err) {
+      console.log(err);
+    }
     // axios - API
   };
 

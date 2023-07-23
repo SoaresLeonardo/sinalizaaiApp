@@ -49,12 +49,17 @@ const Input: React.ForwardRefRenderFunction<HTMLInputElement, InputProps> = (
       )}
       <div
         className={clsx(
-          `py-3 border-b border-b-gray-300 flex items-center`,
-          error ? ' border-b-red-500 mb-2' : ''
+          `py-3 border-b flex items-center`,
+          error ? ' border-b-red-500 mb-2' : 'border-b-gray-300'
         )}
       >
         {startAdorment && (
-          <span className={clsx(`text-zinc-600`, error ? 'text-red-500' : '')}>
+          <span
+            className={clsx(
+              `text-sm `,
+              error ? 'text-red-500' : 'text-zinc-600'
+            )}
+          >
             {startAdorment}
           </span>
         )}
