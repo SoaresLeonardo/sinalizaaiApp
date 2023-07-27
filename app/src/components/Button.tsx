@@ -1,32 +1,36 @@
-import React, { ButtonHTMLAttributes } from 'react';
-import clsx from 'clsx';
+import { ComponentProps } from 'react';
+import { VariantProps, tv } from 'tailwind-variants';
 
-type VariantButton = 'primary' | 'secondary' | 'border';
+const button = tv({
+  base: 'flex items-center justify-center text-sm focus:ring-2 rounded-lg disabled-[disabled=true]:bg-gray-300',
+  variants: {
+    size: {
+      default: 'px-5 py-3',
+      sm: 'px-4 py-2'
+    },
+    color: {
+      default: 'bg-[#7E3AF2] text-white hover:bg-[#8d4ff8]'
+    }
+  },
+  defaultVariants: {
+    size: 'default',
+    color: 'default'
+  }
+});
 
-type ButtonProps = {
-  children: React.ReactNode;
-  className?: string | undefined;
-  variant?: VariantButton;
-  rounded?: boolean;
-} & ButtonHTMLAttributes<HTMLButtonElement>;
+type ButtonProps = ComponentProps<'button'> &
+  VariantProps<typeof button> & {
+    children: React.ReactNode;
+    className?: string | undefined;
+    disabled?: boolean;
+  };
 
-const Button: React.FC<ButtonProps> = ({
-  children = '',
-  variant = 'primary',
-  rounded = false,
-  className = '',
-  ...rest
-}) => {
+const Button = ({ children = '', disabled = false, ...props }: ButtonProps) => {
   return (
     <button
-      className={clsx(
-        `px-5 py-3 flex items-center justify-center text-sm ${className}`,
-        variant === 'primary'
-          ? 'bg-blue-600 text-white hover:bg-blue-500 transition-colors focus:ring-2'
-          : '',
-        rounded ? 'rounded-lg' : ''
-      )}
-      {...rest}
+      {...props}
+      className={`${button()} ${props.className}`}
+      disabled={disabled}
     >
       {children}
     </button>
