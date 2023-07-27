@@ -1,8 +1,9 @@
 import { useSidebar } from '@/hooks/sidebar';
-import clsx from 'clsx';
 import { List, SignOut } from 'phosphor-react';
+import clsx from 'clsx';
 
 export const Navbar = () => {
+  // Estado global do sidebar, caso ele for aberto meu navbar irá se comportar diferente do fechado.
   const { open, setOpen } = useSidebar();
   return (
     <nav
