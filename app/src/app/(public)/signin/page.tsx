@@ -1,17 +1,17 @@
 'use client';
 
-import Link from 'next/link';
+import { useSigninUser } from '@/hooks/user/signin';
 import { Envelope, LockKey } from 'phosphor-react';
 
+import Link from 'next/link';
 import loginImage from '../../../../public/imageLoginNotify.svg';
 import Image from 'next/image';
-
 import Button from '@/components/Button';
 import Input from '@/components/Input';
-import { useSigninUser } from '@/hooks/user/signin';
 
 export default function Signin() {
-  const { register, errors, handleSubmit, signinUserData } = useSigninUser();
+  const { register, formErrors, handleSubmit, signinUserData } =
+    useSigninUser();
 
   return (
     <div className="lg:h-screen flex items-center justify-center py-4">
@@ -26,6 +26,7 @@ export default function Signin() {
               Seja bem-vindo, faça login para prosseguir
             </p>
           </div>
+
           <form
             className="w-full max-w-sm mt-10 space-y-12"
             onSubmit={handleSubmit(signinUserData)}
@@ -34,8 +35,8 @@ export default function Signin() {
               placeholder="Por favor, insira seu e-mail"
               label="E-mail"
               type="email"
-              error={!!errors.email}
-              textHelp={errors.email?.message}
+              error={!!formErrors.email}
+              textHelp={formErrors.email?.message}
               startAdorment={<Envelope size={25} />}
               {...register('email')}
             />
@@ -43,12 +44,12 @@ export default function Signin() {
               placeholder="Por favor, insira sua senha"
               label="Senha"
               type="password"
-              error={!!errors.password}
-              textHelp={errors.password?.message}
+              error={!!formErrors.password}
+              textHelp={formErrors.password?.message}
               startAdorment={<LockKey size={25} />}
               {...register('password')}
             />
-            <Button rounded className="w-full" type="submit" variant="primary">
+            <Button className="w-full" type="submit">
               Fazer login
             </Button>
           </form>
