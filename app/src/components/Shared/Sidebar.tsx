@@ -1,11 +1,11 @@
 import { useSidebar } from '@/hooks/sidebar';
-import clsx from 'clsx';
 import { BookOpen, MapTrifold } from 'phosphor-react';
-import Button from '../Button';
-import Link from 'next/link';
 import { useModal } from '@/hooks/modal';
 import { CheckGeoInfos } from '@/Utils/checkGeoInfos';
 import { useGeoLocation } from '@/hooks/geoLocation';
+import Button from '../Button';
+import clsx from 'clsx';
+import Link from 'next/link';
 
 type LinkProps = {
   name: string;
@@ -27,8 +27,13 @@ const navLinks: LinkProps[] = [
 ];
 
 export const Sidebar = () => {
+  // Estado da sidebar Open / close Global
   const { open } = useSidebar();
+  // Estado do modal Open / Close Global
   const { open: modalOpen, setOpen } = useModal();
+  // Este é onde tem os dados que vem da interação do usuario com o mapa,
+  // Abaixo estou apenas buscando as informações que inicialmente tanto X e Y possam ser Null,
+  // Ou posso obter o resultado já atualizado contendo X e Y definidos
   const { latitudes } = useGeoLocation();
 
   const handleOpenModal = () => {
@@ -56,6 +61,9 @@ export const Sidebar = () => {
           ))}
         </nav>
         <div>
+          {/*A baixo o botão usa do contexto latitudes dentro de uma função que valida se o X e Y foram
+          definidos com cordenadas - number e caso eles estiverem definidos o botão terá um estado diferente de false e assim libero a ação do mesmo;
+          */}
           <Button
             className="w-full"
             onClick={handleOpenModal}
