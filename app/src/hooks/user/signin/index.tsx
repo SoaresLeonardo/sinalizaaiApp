@@ -1,13 +1,16 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { FormProps, schema } from './schema';
 import { useForm } from 'react-hook-form';
+import { FormProps, schema } from './schema';
 import { useAuth } from '@/hooks/auth';
 
 export const useSigninUser = () => {
+  const { signIn } = useAuth();
+
+  // Formulário + Zod
   const {
     register,
     handleSubmit,
-    formState: { errors }
+    formState: { errors: formErrors }
   } = useForm<FormProps>({
     mode: 'onSubmit',
     resolver: zodResolver(schema),
@@ -17,21 +20,14 @@ export const useSigninUser = () => {
     }
   });
 
-  const { signIn } = useAuth();
-
   const signinUserData = async (data: FormProps) => {
-    try {
-      await signIn(data);
-    } catch (err) {
-      console.log(err);
-    }
-    // axios - API
+    await signIn(data);
   };
 
   return {
     register,
     handleSubmit,
     signinUserData,
-    errors
+    formErrors
   };
 };
