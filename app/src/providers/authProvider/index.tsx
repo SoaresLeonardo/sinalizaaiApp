@@ -1,45 +1,42 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+
 'use client';
 
-import { ReactNode, useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
-
-import { GetItemCookies } from '@/Utils/getTokenCookies';
-import { SetItemCookies } from '@/Utils/setTokenCookies';
-import { SignInRequest } from '@/Utils/signInRequest';
-
+import { ReactNode, useState } from 'react';
 import { AuthContext } from '@/contexts/Auth';
-
+import { AuthSignInService } from '@/services/auth.service';
+import { SetItemCookies } from '@/Utils/setTokenCookies';
 import { IUser, SignInData } from '@/interfaces/IAuthUserContext';
-
-import { api } from '@/services/api';
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<IUser | null>(null);
 
-  const Router = useRouter();
-
   const isAuthenticated = !!user;
 
-  useEffect(() => {
-    // Buscando informações atualizadas do usuário no backend
-    const token = GetItemCookies('SinalizaAi.token');
-
-    if (token) {
-      api.get('auth/profile').then((response) => setUser(response.data));
-    }
-  }, []);
-
   async function signIn({ email, password }: SignInData) {
-    const { access_token: token } = await SignInRequest({ email, password });
+    const { data } = await AuthSignInService({ email, password });
 
-    SetItemCookies('SinalizaAi.token', token, {
-      maxAge: 60 * 60 * 1
-    });
+    // Caso a API retornar algum erro ele é capturado aqui.
+    if (data.error) {
+      console.log(data.msg);
 
-    Router.push('/user/dashboard');
+      return;
+    }
+
+    /*
+     Caso não for capturado algum erro e a API retornar o token do usuário
+      eu vou inserir-lo dentro dos cookies
+    */
+    if (data.response?.token) {
+      SetItemCookies('SinalizaAi.token', data.response.token, {
+        maxAge: 60 * 60 * 1 // 1 hour
+      });
+    }
   }
 
-  function logout() {}
+  function logout() {
+    console.log('usuário deslogado');
+  }
 
   return (
     <AuthContext.Provider
