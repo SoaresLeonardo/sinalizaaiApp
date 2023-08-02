@@ -4,7 +4,7 @@ export interface IUser {
 
 export interface SignInData {
   email: string;
-  password: string;
+  senha: string;
 }
 
 export interface IContext {

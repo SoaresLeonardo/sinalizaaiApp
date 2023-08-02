@@ -7,12 +7,14 @@ import { AxiosError } from 'axios';
 
 export async function AuthSignInService({
   email,
-  password
+  senha
 }: ISignInRequest): Promise<ISignInResponse> {
   try {
-    const response = await api.post(process.env.NEXT_PUBLIC_API_SIGNIN_URL, {
-      email,
-      password
+    const response = await api.get(process.env.NEXT_PUBLIC_API_SIGNIN_URL, {
+      params: {
+        email,
+        senha
+      }
     });
 
     return {

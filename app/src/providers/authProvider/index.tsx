@@ -13,8 +13,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const isAuthenticated = !!user;
 
-  async function signIn({ email, password }: SignInData) {
-    const { data } = await AuthSignInService({ email, password });
+  async function signIn({ email, senha }: SignInData) {
+    const { data } = await AuthSignInService({ email, senha });
 
     // Caso a API retornar algum erro ele é capturado aqui.
     if (data.error) {

@@ -1,11 +1,8 @@
-import { AuthProvider } from '@/providers/authProvider';
 import './globals.css';
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
-import { QueryProvider } from '@/providers/queryProvider';
-import { SidebarProvider } from '@/providers/sidebarProvider';
-import { ModalProvider } from '@/providers/modalProvider';
-import { GeoLocationProvider } from '@/providers/geoLocationProvider';
+
+import AppProvider from '@/providers';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -22,15 +19,7 @@ export default function RootLayout({
   return (
     <html lang="pt-BR">
       <body className={inter.className}>
-        <QueryProvider>
-          <GeoLocationProvider>
-            <ModalProvider>
-              <SidebarProvider>
-                <AuthProvider>{children}</AuthProvider>
-              </SidebarProvider>
-            </ModalProvider>
-          </GeoLocationProvider>
-        </QueryProvider>
+        <AppProvider>{children}</AppProvider>
       </body>
     </html>
   );

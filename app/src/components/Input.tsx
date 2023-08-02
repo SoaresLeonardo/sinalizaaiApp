@@ -66,7 +66,7 @@ const Input: React.ForwardRefRenderFunction<HTMLInputElement, InputProps> = (
         <input
           type={typeChangePassword}
           ref={ref}
-          className="outline-none w-full pl-3 placeholder:text-sm"
+          className="outline-none w-full pl-3 placeholder:text-sm bg-transparent"
           id={inputId}
           {...rest}
         />

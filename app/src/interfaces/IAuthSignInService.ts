@@ -1,6 +1,6 @@
 export interface ISignInRequest {
   email: string;
-  password: string;
+  senha: string;
 }
 
 export interface ISignInResponse {

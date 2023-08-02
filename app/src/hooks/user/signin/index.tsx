@@ -16,7 +16,7 @@ export const useSigninUser = () => {
     resolver: zodResolver(schema),
     defaultValues: {
       email: '',
-      password: ''
+      senha: ''
     }
   });
 
