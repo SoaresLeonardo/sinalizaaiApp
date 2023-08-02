@@ -44,10 +44,10 @@ export default function Signin() {
               placeholder="Por favor, insira sua senha"
               label="Senha"
               type="password"
-              error={!!formErrors.password}
-              textHelp={formErrors.password?.message}
+              error={!!formErrors.senha}
+              textHelp={formErrors.senha?.message}
               startAdorment={<LockKey size={25} />}
-              {...register('password')}
+              {...register('senha')}
             />
             <Button className="w-full" type="submit">
               Fazer login
