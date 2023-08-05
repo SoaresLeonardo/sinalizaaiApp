@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 const delay = (amount = 750) =>
   new Promise((resolve) => setTimeout(resolve, amount));
 
@@ -29,5 +30,20 @@ export async function ChamadosNaoFinalizados() {
     messages: [],
     statusCode: 200,
     status: '200'
+  };
+}
+
+export async function LoginUser({
+  email,
+  senha
+}: {
+  email: string;
+  senha: string;
+}) {
+  return {
+    data: {
+      token: '8383838399dsadasd8as8das8dsa7d7as8das8da8s',
+      role: 'Cidadao'
+    }
   };
 }

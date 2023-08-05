@@ -1,5 +1,6 @@
 export interface IUser {
-  email?: string;
+  nome: string;
+  role: string;
 }
 
 export interface SignInData {

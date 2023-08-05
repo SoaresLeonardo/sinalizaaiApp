@@ -1,5 +1,3 @@
-import * as cookie from 'cookie';
-
 import { setCookie } from 'nookies';
 
 export function SetItemCookies(
