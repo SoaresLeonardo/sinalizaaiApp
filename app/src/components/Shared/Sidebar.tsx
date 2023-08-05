@@ -1,5 +1,5 @@
 import { useSidebar } from '@/hooks/sidebar';
-import { BookOpen, MapTrifold } from 'phosphor-react';
+import { BookOpen, MapTrifold, UserPlus } from 'phosphor-react';
 import { CheckGeoInfos } from '@/Utils/checkGeoInfos';
 import { useGeoLocation } from '@/hooks/geoLocation';
 import clsx from 'clsx';
@@ -8,6 +8,7 @@ import Image from 'next/image';
 import sidebarImage from '../../../public/sidebarImage.svg';
 import { useModal } from '@/hooks/modal';
 import ActiveLinks from '../ActiveLinks';
+import { useAuth } from '@/hooks/auth';
 
 type LinkProps = {
   name: string;
@@ -38,10 +39,12 @@ export const Sidebar = () => {
   // Ou posso obter o resultado já atualizado contendo X e Y definidos
   const { latitudes } = useGeoLocation();
 
+  const { user } = useAuth();
+
   return (
     <aside
       className={clsx(
-        `p-3 border-r lg:static w-[80%] border-r-gray-900 col-span-1 fixed top-0 lg:w-full bottom-0 bg-[#0a0f17] transition-transform duration-300 overflow-y-scroll`,
+        `p-3 border-r lg:static w-[80%] border-r-gray-900 col-span-1 fixed top-0 lg:w-full bottom-0 bg-[#0a0f17] transition-transform duration-300 overflow-y-scroll z-10`,
         open ? '-left-0' : '-left-full'
       )}
     >
@@ -57,10 +60,21 @@ export const Sidebar = () => {
             {navLinks.map((navLink) => (
               <li key={navLink.name}>
                 <ActiveLinks href={navLink.href} passHref legacyBehavior>
-                  {navLink.name}
+                  {navLink.icon}
+                  <span>{navLink.name}</span>
                 </ActiveLinks>
               </li>
             ))}
+            {user?.role === 'Administrador' && (
+              <>
+                <li>
+                  <ActiveLinks href="/admin/dashboard">
+                    <UserPlus size={20} />
+                    <span>Administrador</span>
+                  </ActiveLinks>
+                </li>
+              </>
+            )}
           </ul>
         </nav>
         {/*Imagem do Sidebar & Botão de abrir chamado*/}
