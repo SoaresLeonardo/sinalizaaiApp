@@ -1,33 +1,12 @@
 'use client';
 
-import { useForm } from 'react-hook-form';
-import { useQuery } from 'react-query';
+import { IGetChamadoService } from '@/interfaces/chamados/IGetchamados.service';
 import { Car, CaretDown, CaretUp } from 'phosphor-react';
 import { Dispatch, SetStateAction, useState } from 'react';
-import { api } from '@/services/api';
-import { z } from 'zod';
+import { GetChamados } from '@/services/chamados';
+import { useQuery } from 'react-query';
+import StateChamado from '@/components/StateChamado';
 import Link from 'next/link';
-
-const schema = z.object({
-  dataInicial: z.coerce.date(),
-  dataFinal: z.coerce.date()
-});
-
-export type FormProps = z.infer<typeof schema>;
-
-type ChamadoProps = {
-  id: number;
-  latitude: number;
-  longitude: number;
-  tipoIrregularidade: number;
-  tipoIrregularidadeDescription: string;
-  situação: string;
-};
-
-type DataFilterProps = {
-  dataInicial: Date;
-  dataFinal: Date;
-};
 
 type OptionProps = {
   text: string;
@@ -35,110 +14,91 @@ type OptionProps = {
 };
 
 export default function UserChamados() {
-  // Esse estado armazena das datas que o usuário deseja buscar por chamado.
-
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [dataFilter, setDataFilter] = useState<null | DataFilterProps>(null);
-
-  // Esse Estado armazena a situação que o usuário quer buscar dos chamados, inicialmente eu mando que ele não quer nada para buscar todos os chamados
+  // Estes são meus states que armazenam os dados dos filtros que o usuário pode aplicar na busca.
   const [selected, setSelected] = useState<{ option: OptionProps }>({
     option: {
       text: 'Nenhuma',
       value: null
     }
   });
-  // Usando o React query para fazer a requisição na API.
-  // Aqui eu recolho o data(as informações da API) através da variável DATA, mas logo renomeio para "chamadosList"
-  // Busco minha função refetch que uso para refazer a requisição caso o usuário use algum filtro.
-  // E também uso o estado de IsLoading para evitar possivéis errors.
-  const {
-    data: chamadosList,
-    refetch,
-    isLoading
-  } = useQuery<{ data: ChamadoProps[] }>('chamados', async () => {
-    const response = await api.get(`api/v1/chamado`, {
-      params: {
-        situacao: selected?.option.value ? selected.option.value : ''
-      }
-    });
-    return response.data;
-  });
-
-  // Nessa função eu busco os dados expecificadamente dos input de date para poder filtrar os chamados por data.
-  const handleFilterChamados = (data: FormProps) => {
-    setDataFilter({ dataInicial: data.dataInicial, dataFinal: data.dataFinal });
-  };
-
-  // React hook form - Onde eu recolho os dados
-  const { handleSubmit, register } = useForm<FormProps>();
+  // Este é a query que utilizo para buscar os chamados, e o tipo da situação que cada um se encontra no momento.
+  const { data: chamadosList, isLoading } = useQuery<{
+    data: IGetChamadoService[];
+  }>(['chamados', { params: selected.option.value }], () =>
+    GetChamados({ selectedSituation: selected.option.value })
+  );
 
   return (
     <div className="max-w-7xl mx-auto w-full lg:px-12 p-6 mt-10">
       <div className="flex flex-col space-y-10">
         <h1 className="sm:text-2xl text-xl font-semibold text-zinc-100 left-28 italic">
-          Chamados em aberto
+          Meus chamados
         </h1>
       </div>
-      {/* Filtro de listagem */}
-      <div className="mt-12">
-        <form onSubmit={handleSubmit(handleFilterChamados)}>
-          <div className="flex items-center gap-6">
-            {/* Input de data Inicial */}
-            <div className="flex items-center space-x-2 text-zinc-400">
-              <label htmlFor="DataInicial" className="text-sm cursor-pointer">
-                Data inicial:
-              </label>
-              <input
-                type="date"
-                id="DataInicial"
-                className="bg-[#242c37] p-3 rounded-sm outline-none text-zinc-50 border border-gray-600 text-sm"
-                {...register('dataInicial')}
-              />
-            </div>
-            {/* Input de data final */}
-            <div className="flex items-center space-x-2 text-zinc-400">
-              <label htmlFor="DataFinal" className="text-sm cursor-pointer">
-                Data final:
-              </label>
-              <input
-                type="date"
-                id="DataFinal"
-                className="bg-[#242c37] p-3 rounded-sm outline-none text-zinc-50 border border-gray-600 text-sm"
-                {...register('dataFinal')}
-              />
-            </div>
-            {/*Componente de Combox com os tipos das situações dos chamados*/}
-            <div className="flex items-center space-x-2 text-zinc-400">
-              <label htmlFor="" className="text-sm cursor-pointer">
-                Situação:
-              </label>
-              {/*Componente */}
-              <ComboxSelect
-                selected={selected?.option}
-                setSelected={setSelected}
-              />
-            </div>
-
-            {/*Este botão é o responsavél por fazer a requisição novamente na API - e trazer os novos dados com base no filtro! */}
-            <button
-              className="bg-[#7E3AF2] text-zinc-50 p-3 rounded-sm text-sm w-24"
-              type="submit"
-              onClick={() => refetch()}
-            >
-              Filtrar
-            </button>
+      {/* Filtro de pesquisa */}
+      <div className="mt-12 lg:max-w-full max-w-lg">
+        <div className="flex lg:flex-row flex-col lg:items-center gap-6">
+          {/* Input de data Inicial */}
+          <div className="flex lg:flex-row flex-col lg:items-center lg:space-x-2 text-zinc-400">
+            <label htmlFor="DataInicial" className="text-sm cursor-pointer">
+              Data inicial:
+            </label>
+            <input
+              type="date"
+              id="DataInicial"
+              className="bg-[#242c37] p-3 rounded-sm outline-none text-zinc-50 border border-gray-600 text-sm"
+            />
           </div>
-        </form>
+          {/* Input de data final */}
+          <div className="flex lg:flex-row flex-col lg:items-center lg:space-x-2 text-zinc-400">
+            <label htmlFor="DataFinal" className="text-sm cursor-pointer">
+              Data final:
+            </label>
+            <input
+              type="date"
+              id="DataFinal"
+              className="bg-[#242c37] p-3 rounded-sm outline-none text-zinc-50 border border-gray-600 text-sm"
+            />
+          </div>
+          {/*Componente de Combox com os tipos das situações dos chamados*/}
+          <div className="flex lg:flex-row flex-col lg:items-center lg:space-x-2 text-zinc-400">
+            <label className="text-sm cursor-pointer">Situação:</label>
+            {/*Componente */}
+            <ComboxSelect
+              selected={selected?.option}
+              setSelected={setSelected}
+            />
+          </div>
+        </div>
       </div>
 
       {/* Contador de resultados */}
-      <ChamadosListCounter
-        qtd={chamadosList?.data.length ? chamadosList?.data.length : 0}
-      />
+      <ChamadosListCounter qtd={chamadosList?.data.length} />
 
       {/*Lista de chamados */}
-      <div className="flex flex-col mt-16 space-y-8 lg:max-w-3xl w-full">
-        {isLoading && <span>Carregando seus chamados.</span>}
+      <div className="flex flex-col mt-11 space-y-8 lg:max-w-3xl w-full">
+        {isLoading && (
+          <>
+            <div className="p-5 rounded-xl shadow-md cursor-pointer w-full border-[#242c37] border-2 flex items-center space-x-5 transition duration-75 animate-pulse">
+              <div className="p-3 bg-[#242c37] rounded-md">
+                <div className="h-8 w-8" />
+              </div>
+              <div className="h-2.5 bg-gray-200 rounded-full dark:bg-gray-700 w-48 mb-4"></div>
+            </div>
+            <div className="p-5 rounded-xl shadow-md cursor-pointer w-full border-[#242c37] border-2 flex items-center space-x-5 transition duration-75 animate-pulse">
+              <div className="p-3 bg-[#242c37] rounded-md">
+                <div className="h-8 w-8" />
+              </div>
+              <div className="h-2.5 bg-gray-200 rounded-full dark:bg-gray-700 w-48 mb-4"></div>
+            </div>
+            <div className="p-5 rounded-xl shadow-md cursor-pointer w-full border-[#242c37] border-2 flex items-center space-x-5 transition duration-75 animate-pulse">
+              <div className="p-3 bg-[#242c37] rounded-md">
+                <div className="h-8 w-8" />
+              </div>
+              <div className="h-2.5 bg-gray-200 rounded-full dark:bg-gray-700 w-48 mb-4"></div>
+            </div>
+          </>
+        )}
 
         {/*Caso o estado de loading seja diferente de verdadeiro eu exibo a lista */}
         {!isLoading && (
@@ -154,31 +114,41 @@ export default function UserChamados() {
 }
 
 // Componente que uso apenas para receber um número que indica a quantidade de chamados que foi retornado da requisição e mostro em tela
-const ChamadosListCounter = ({ qtd }: { qtd: number }) => {
+const ChamadosListCounter = ({ qtd }: { qtd: number | undefined }) => {
   return (
     <>
-      <div className="mt-12">
-        <span className="text-zinc-400">
-          Resultados:
-          <strong className="text-[#7E3AF2]">{qtd}</strong>
-        </span>
-      </div>
+      {!qtd && (
+        <div className="mt-12 animate-pulse">
+          <div className="h-3 bg-gray-200 rounded-full dark:bg-gray-700 w-28"></div>
+        </div>
+      )}
+      {qtd && (
+        <div className="mt-12">
+          <span className="text-zinc-400">
+            Resultados:
+            <strong className="text-[#7E3AF2]">{qtd}</strong>
+          </span>
+        </div>
+      )}
     </>
   );
 };
 
 // Componente que uso para renderizar as informações do chamado & também redireciona para a rota user/chamado/IDCHAMADO
-const ChamadosResult = (chamado: ChamadoProps) => {
+const ChamadosResult = (chamado: IGetChamadoService) => {
   return (
     <>
-      <Link href={`user/chamados/${chamado.id}`}>
+      <Link href={`chamados/${chamado.id}`}>
         <div className="p-5 rounded-xl shadow-md cursor-pointer w-full  border-[#242c37] border-2 hover:border-[#7E3AF2] flex items-center space-x-5 transition duration-75">
           <div className="p-3 bg-[#242c37] text-[#7E3AF2] rounded-md">
             <Car size={30} />
           </div>
-          <span className="text-zinc-100 text-lg">
-            {chamado.tipoIrregularidadeDescription}
-          </span>
+          <div className="flex items-center justify-between w-full">
+            <span className="text-zinc-100 text-base">
+              {chamado.tipoIrregularidadeDescription}
+            </span>
+            <StateChamado statusSituação={chamado.situacao} />
+          </div>
         </div>
       </Link>
     </>
