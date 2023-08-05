@@ -7,6 +7,7 @@ import { Header } from '../Shared/Header';
 import React, { ReactNode } from 'react';
 import { Modal } from '../Modal';
 import { useModal } from '@/hooks/modal';
+import Button from '../Button';
 
 type Props = {
   children: ReactNode;
@@ -43,7 +44,7 @@ const Layout: React.FC<Props> = ({ children }) => {
           <Modal.Title>Abrir um chamado.</Modal.Title>
 
           <button
-            className="text-zinc-800 bg-gray-100 p-2 rounded-md"
+            className="text-zinc-100 bg-[#242c37] p-2 rounded-md"
             onClick={() => setOpenModal(false)}
           >
             <X size={20} />
@@ -51,7 +52,7 @@ const Layout: React.FC<Props> = ({ children }) => {
         </Modal.Header>
         <Modal.Content>
           <div className="flex flex-col gap-5 p-6">
-            <div>
+            <div className="text-neutral-200">
               <h2>Endereço: Rua senador luiz piza</h2>
               {/*Form*/}
               <div className="w-72">
@@ -62,6 +63,9 @@ const Layout: React.FC<Props> = ({ children }) => {
             </div>
           </div>
         </Modal.Content>
+        <Modal.Actions>
+          <Button>Finalizar</Button>
+        </Modal.Actions>
       </Modal.Root>
     </div>
   );
