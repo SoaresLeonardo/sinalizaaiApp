@@ -10,8 +10,8 @@ export default function DashboardUserPage() {
   // Recebendo os dados e inserindo eles dentro do estado que está no contexto global;
   const handleClick = () => {
     //Dados X e Y
-    const latitudeX = Math.random();
-    const latitudeY = Math.random();
+    const latitudeX = '-9393939328383923923923232324';
+    const latitudeY = '-2192382838283293929329392392';
 
     setLatitudes({
       geoInfo: {

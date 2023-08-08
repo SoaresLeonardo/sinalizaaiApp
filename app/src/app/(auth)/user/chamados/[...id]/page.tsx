@@ -9,6 +9,7 @@ import StateChamadoTextBox from '@/components/StateChamado/StateChamadoTextBox';
 import ChamadoDetailsSkeleton from '@/components/Skeletons/ChamadoDetails';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useAuth } from '@/hooks/auth';
 
 type PageProps = {
   params: {
@@ -22,6 +23,8 @@ export default function GetChamadoId({ params }: PageProps) {
   }>(['detalhesChamado', { params: params.id }], () =>
     GetChamadosByID({ id: params.id })
   );
+
+  const { user } = useAuth();
 
   if (!isLoading) {
     if (!chamadosDetails?.data) {
@@ -53,10 +56,23 @@ export default function GetChamadoId({ params }: PageProps) {
 
   return (
     <div className="max-w-7xl mx-auto w-full lg:px-12 p-6 mt-10">
-      <div className="flex flex-col space-y-10">
+      <div className="flex item-center justify-between">
         <h1 className="sm:text-2xl text-xl font-semibold text-zinc-100 left-28 italic">
           Mais Detalhes
         </h1>
+        {user?.role && user.role === 'Administrador' && (
+          <>
+            <Link
+              href={`/admin/dashboard/chamados/${params.id}`}
+              passHref
+              legacyBehavior
+            >
+              <a className="flex items-center justify-center text-sm focus:ring-2 rounded-lg disabled-[disabled=true]:bg-gray-300 border border-gray-700 px-5 py-3 text-gray-400">
+                Abrir painel
+              </a>
+            </Link>
+          </>
+        )}
       </div>
       <div className="flex flex-col">
         <div className="px-4 sm:px-0">

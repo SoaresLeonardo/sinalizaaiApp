@@ -1,5 +1,5 @@
 export function CheckGeoInfos(x: number | null, y: number | null) {
-  if (typeof x === 'number' && typeof y === 'number') {
+  if (typeof x === 'string' && typeof y === 'string') {
     return false; // Se ambos são números, retorna true
   }
 

@@ -1,9 +1,9 @@
 import { SituaçãoProps } from '@/@types';
 
-export type DataFilterProps = {
-  dataInicial: Date;
-  dataFinal: Date;
-};
+export interface IDataFilterProps {
+  dataInicial: string | null;
+  dataFinal: string | null;
+}
 
 export interface IGetChamadoService {
   id: number;

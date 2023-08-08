@@ -1,6 +1,6 @@
 export interface IUser {
   nome: string;
-  role: string;
+  role: 'Administrador' | 'Cidadao';
 }
 
 export interface SignInData {
@@ -9,7 +9,7 @@ export interface SignInData {
 }
 
 export interface IContext {
-  signIn: (data: SignInData) => Promise<void>;
+  SignIn: (data: SignInData) => Promise<void>;
   logout: () => void;
   isAuthenticated: boolean;
   user: IUser | null;

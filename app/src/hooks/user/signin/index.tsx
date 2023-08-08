@@ -4,7 +4,7 @@ import { FormProps, schema } from './schema';
 import { useAuth } from '@/hooks/auth';
 
 export const useSigninUser = () => {
-  const { signIn } = useAuth();
+  const { SignIn } = useAuth();
 
   // Formulário + Zod
   const {
@@ -21,7 +21,7 @@ export const useSigninUser = () => {
   });
 
   const signinUserData = async (data: FormProps) => {
-    await signIn(data);
+    await SignIn(data);
   };
 
   return {

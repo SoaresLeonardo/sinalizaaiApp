@@ -1,35 +1,54 @@
+import clsx from 'clsx';
 import { CaretDown, CaretUp } from 'phosphor-react';
+import { Dispatch, SetStateAction, useState } from 'react';
 
 type OptionProps = {
   text: string;
-  value: string;
+  value: number | null;
 };
 
 type ComboxProps = {
   options: OptionProps[];
-  textarea: string;
-  isOpen: boolean;
+  selected: OptionProps;
+  static?: boolean;
+  setSelected: Dispatch<
+    SetStateAction<{
+      option: OptionProps;
+    }>
+  >;
 };
-const Combox = ({ options, isOpen, ...props }: ComboxProps) => {
+const Combox = ({ options, selected, setSelected, ...props }: ComboxProps) => {
+  const [isOpen, setIsOpen] = useState(false);
+  const handleOpenCombox = () => {
+    setIsOpen(!isOpen);
+  };
   return (
-    <div className="relative">
-      <button className="bg-[#242c37] p-3 rounded-sm outline-none text-zinc-50 border border-gray-600 w-44 flex items-center justify-between text-sm">
-        <span>{props.textarea}</span>
+    <div className={props.static ? 'relative' : ''}>
+      <button
+        className="bg-[#242c37] p-3 rounded-sm outline-none text-zinc-50 border border-gray-600 w-44 flex items-center justify-between text-sm"
+        onClick={handleOpenCombox}
+      >
+        <span>{selected?.text}</span>
         {isOpen ? <CaretUp size={15} /> : <CaretDown size={15} />}
       </button>
       {isOpen && (
         <>
-          <div className="absolute bg-[#242c37] p-3 rounded-sm outline-none text-zinc-50 border border-gray-600 w-44 mt-2">
-            {options.map((op, i) => (
+          <div
+            className={clsx(
+              `bg-[#242c37] p-3 rounded-sm outline-none text-zinc-50 border border-gray-600 w-44 mt-2`,
+              props.static ? 'absolute' : ''
+            )}
+          >
+            {options.map((option, i) => (
               <span
                 key={i}
                 onClick={() => {
-                  setSelected({ option: op });
-                  setSelectIsOpen(false);
+                  setSelected({ option });
+                  setIsOpen(false);
                 }}
                 className="block p-2 hover:bg-[#333c49] cursor-pointer rounded-sm text-sm"
               >
-                {op.text}
+                {option.text}
               </span>
             ))}
           </div>

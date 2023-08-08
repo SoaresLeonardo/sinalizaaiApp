@@ -10,13 +10,7 @@ export const Header = () => {
           <User size={20} className="text-[#7E3AF2]" />
 
           <div className="flex flex-col">
-            {!user?.nome && !user?.role && (
-              <div className="max-w-sm animate-pulse">
-                <div className="h-3.5 bg-gray-200 rounded-full dark:bg-gray-700 w-32 mb-1"></div>
-                <div className="h-2.5 bg-gray-200 rounded-full dark:bg-gray-700 w-14 mb-1"></div>
-              </div>
-            )}
-            {user?.nome && user?.role && (
+            {user?.nome ? (
               <>
                 <h1 className="font-semibold">{user?.nome}</h1>
                 <span className="text-xs text-zinc-400">
@@ -26,6 +20,10 @@ export const Header = () => {
                     ? 'Administrador'
                     : ''}
                 </span>
+              </>
+            ) : (
+              <>
+                <span>Carregando</span>
               </>
             )}
           </div>

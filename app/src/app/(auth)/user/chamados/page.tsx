@@ -1,32 +1,76 @@
 'use client';
 
 import { IGetChamadoService } from '@/interfaces/chamados/IGetchamados.service';
-import { Car, CaretDown, CaretUp } from 'phosphor-react';
-import { Dispatch, SetStateAction, useState } from 'react';
+import { optionsSituacao } from '@/data/options/op.situacao';
 import { GetChamados } from '@/services/chamados';
+import { OptionProps } from '@/data/options/op.type';
+import { formatFunc } from '@/Utils/dateFormat';
+import { useState } from 'react';
 import { useQuery } from 'react-query';
+import { useForm } from 'react-hook-form';
+import { Car } from 'phosphor-react';
+import imageNotChamados from '../../../../../public/nochamados.svg';
 import StateChamado from '@/components/StateChamado';
+import Button from '@/components/Button';
+import Combox from '@/components/Combox';
+import Image from 'next/image';
 import Link from 'next/link';
 
-type OptionProps = {
-  text: string;
-  value: number | null;
+type DataFilterProps = {
+  dataInicial: string;
+  dataFinal: string;
 };
 
 export default function UserChamados() {
   // Estes são meus states que armazenam os dados dos filtros que o usuário pode aplicar na busca.
+  const [data, setData] = useState<{ datas: DataFilterProps } | null>(null);
   const [selected, setSelected] = useState<{ option: OptionProps }>({
     option: {
       text: 'Nenhuma',
       value: null
     }
   });
+  const [selectedValue, setSelectedValue] = useState<null | number>(null);
+
   // Este é a query que utilizo para buscar os chamados, e o tipo da situação que cada um se encontra no momento.
-  const { data: chamadosList, isLoading } = useQuery<{
+  const {
+    data: chamadosList,
+    isLoading,
+    refetch
+  } = useQuery<{
     data: IGetChamadoService[];
-  }>(['chamados', { params: selected.option.value }], () =>
-    GetChamados({ selectedSituation: selected.option.value })
+  }>(
+    ['chamados', data?.datas.dataInicial, data?.datas.dataFinal, selectedValue],
+    () =>
+      GetChamados({
+        selectedSituation: selectedValue,
+        dataInicial: data?.datas.dataInicial,
+        dataFinal: data?.datas.dataFinal
+      })
   );
+
+  const { register, handleSubmit } = useForm({
+    defaultValues: {
+      dataInicial: '',
+      dataFinal: ''
+    }
+  });
+
+  const handleFilterData = ({
+    dataInicial,
+    dataFinal
+  }: {
+    dataInicial: string;
+    dataFinal: string;
+  }) => {
+    setData({
+      datas: {
+        dataInicial: formatFunc(dataInicial),
+        dataFinal: formatFunc(dataFinal)
+      }
+    });
+    setSelectedValue(selected.option.value);
+  };
 
   return (
     <div className="max-w-7xl mx-auto w-full lg:px-12 p-6 mt-10">
@@ -37,46 +81,55 @@ export default function UserChamados() {
       </div>
       {/* Filtro de pesquisa */}
       <div className="mt-12 lg:max-w-full max-w-lg">
-        <div className="flex lg:flex-row flex-col lg:items-center gap-6">
-          {/* Input de data Inicial */}
-          <div className="flex lg:flex-row flex-col lg:items-center lg:space-x-2 text-zinc-400">
-            <label htmlFor="DataInicial" className="text-sm cursor-pointer">
-              Data inicial:
-            </label>
-            <input
-              type="date"
-              id="DataInicial"
-              className="bg-[#242c37] p-3 rounded-sm outline-none text-zinc-50 border border-gray-600 text-sm"
-            />
+        <form onSubmit={handleSubmit(handleFilterData)}>
+          <div className="flex lg:flex-row flex-col lg:items-center gap-6">
+            {/* Input de data Inicial */}
+            <div className="flex lg:flex-row flex-col lg:items-center lg:space-x-2 text-zinc-400">
+              <label htmlFor="DataInicial" className="text-sm cursor-pointer">
+                Data inicial:
+              </label>
+              <input
+                type="date"
+                id="DataInicial"
+                {...register('dataInicial')}
+                className="bg-[#242c37] p-3 rounded-sm outline-none text-zinc-50 border border-gray-600 text-sm"
+              />
+            </div>
+            {/* Input de data final */}
+            <div className="flex lg:flex-row flex-col lg:items-center lg:space-x-2 text-zinc-400">
+              <label htmlFor="DataFinal" className="text-sm cursor-pointer">
+                Data final:
+              </label>
+              <input
+                type="date"
+                id="DataFinal"
+                {...register('dataFinal')}
+                className="bg-[#242c37] p-3 rounded-sm outline-none text-zinc-50 border border-gray-600 text-sm"
+              />
+            </div>
+            {/*Componente de Combox com os tipos das situações dos chamados*/}
+            <div className="flex lg:flex-row flex-col lg:items-center lg:space-x-2 text-zinc-400">
+              <label className="text-sm cursor-pointer">Situação:</label>
+              {/*Componente */}
+              <Combox
+                options={optionsSituacao}
+                selected={selected.option}
+                setSelected={setSelected}
+                static
+              />
+            </div>
+            <Button onClick={() => refetch()}>Aplicar</Button>
           </div>
-          {/* Input de data final */}
-          <div className="flex lg:flex-row flex-col lg:items-center lg:space-x-2 text-zinc-400">
-            <label htmlFor="DataFinal" className="text-sm cursor-pointer">
-              Data final:
-            </label>
-            <input
-              type="date"
-              id="DataFinal"
-              className="bg-[#242c37] p-3 rounded-sm outline-none text-zinc-50 border border-gray-600 text-sm"
-            />
-          </div>
-          {/*Componente de Combox com os tipos das situações dos chamados*/}
-          <div className="flex lg:flex-row flex-col lg:items-center lg:space-x-2 text-zinc-400">
-            <label className="text-sm cursor-pointer">Situação:</label>
-            {/*Componente */}
-            <ComboxSelect
-              selected={selected?.option}
-              setSelected={setSelected}
-            />
-          </div>
-        </div>
+        </form>
       </div>
 
       {/* Contador de resultados */}
-      <ChamadosListCounter qtd={chamadosList?.data.length} />
+      <ChamadosListCounter
+        qtd={chamadosList?.data.length ? chamadosList?.data.length : undefined}
+      />
 
       {/*Lista de chamados */}
-      <div className="flex flex-col mt-11 space-y-8 lg:max-w-3xl w-full">
+      <div className="flex flex-col mt-11 space-y-8 lg:max-w-4xl w-full">
         {isLoading && (
           <>
             <div className="p-5 rounded-xl shadow-md cursor-pointer w-full border-[#242c37] border-2 flex items-center space-x-5 transition duration-75 animate-pulse">
@@ -108,6 +161,21 @@ export default function UserChamados() {
             ))}
           </>
         )}
+
+        {/*Caso não tiver uma resposta eu exibo essa mensagem */}
+        {!chamadosList?.data.length && (
+          <>
+            <div className="flex flex-col items-center gap-11 p-2">
+              <Image
+                src={imageNotChamados}
+                alt="Chamados não encontrado"
+                width={230}
+                height={230}
+              />
+              <span className="text-zinc-50">Não a chamados por aqui.</span>
+            </div>
+          </>
+        )}
       </div>
     </div>
   );
@@ -124,8 +192,8 @@ const ChamadosListCounter = ({ qtd }: { qtd: number | undefined }) => {
       )}
       {qtd && (
         <div className="mt-12">
-          <span className="text-zinc-400">
-            Resultados:
+          <span className="text-zinc-400 space-x-1">
+            <span>Resultado:</span>
             <strong className="text-[#7E3AF2]">{qtd}</strong>
           </span>
         </div>
@@ -151,79 +219,6 @@ const ChamadosResult = (chamado: IGetChamadoService) => {
           </div>
         </div>
       </Link>
-    </>
-  );
-};
-
-// Componente de Combox
-const ComboxSelect = ({
-  selected,
-  setSelected
-}: {
-  selected: OptionProps | null;
-  setSelected: Dispatch<
-    SetStateAction<{
-      option: OptionProps;
-    }>
-  >;
-}) => {
-  const [selectIsOpen, setSelectIsOpen] = useState(false);
-  const hadleSelectIsOpen = () => {
-    setSelectIsOpen(!selectIsOpen);
-  };
-  const options: OptionProps[] = [
-    {
-      text: 'Aberto',
-      value: 0
-    },
-    {
-      text: 'Analise',
-      value: 1
-    },
-    {
-      text: 'Execução',
-      value: 2
-    },
-    {
-      text: 'Bloqueado',
-      value: 3
-    },
-    {
-      text: 'Finalizado',
-      value: 4
-    },
-    {
-      text: 'Nenhuma',
-      value: null
-    }
-  ];
-  return (
-    <>
-      <div className="relative">
-        <button
-          className="bg-[#242c37] p-3 rounded-sm outline-none text-zinc-50 border border-gray-600 w-44 flex items-center justify-between text-sm"
-          onClick={hadleSelectIsOpen}
-        >
-          <span>{selected?.text ? selected.text : 'Irregularidade'}</span>
-          {selectIsOpen ? <CaretUp size={15} /> : <CaretDown size={15} />}
-        </button>
-        {selectIsOpen && (
-          <div className="absolute bg-[#242c37] p-3 rounded-sm outline-none text-zinc-50 border border-gray-600 w-44 mt-2">
-            {options.map((op, i) => (
-              <span
-                key={i}
-                onClick={() => {
-                  setSelected({ option: op });
-                  setSelectIsOpen(false);
-                }}
-                className="block p-2 hover:bg-[#333c49] cursor-pointer rounded-sm text-sm"
-              >
-                {op.text}
-              </span>
-            ))}
-          </div>
-        )}
-      </div>
     </>
   );
 };

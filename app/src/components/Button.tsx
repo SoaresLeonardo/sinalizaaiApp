@@ -9,7 +9,8 @@ const button = tv({
       sm: 'px-4 py-2'
     },
     color: {
-      default: 'bg-[#7E3AF2] text-white hover:bg-[#8d4ff8]'
+      default: 'bg-[#7E3AF2] text-white hover:bg-[#8d4ff8]',
+      secundary: 'bg-transparent'
     }
   },
   defaultVariants: {
