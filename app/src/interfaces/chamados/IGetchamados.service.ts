@@ -7,9 +7,9 @@ export interface IDataFilterProps {
 
 export interface IGetChamadoService {
   id: number;
-  latitude: number;
-  longitude: number;
-  tipoIrregularidade: number;
+  latitude: string;
+  longitude: string;
+  tipoIrregularidade: string;
   tipoIrregularidadeDescription: string;
   situacao: SituaçãoProps;
 }

@@ -1,6 +1,8 @@
+export type Role = 'Cidadao' | 'Administrador';
+
 export interface IUser {
   nome: string;
-  role: 'Administrador' | 'Cidadao';
+  role: Role;
 }
 
 export interface SignInData {

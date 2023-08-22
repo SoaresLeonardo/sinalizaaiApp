@@ -8,22 +8,26 @@ type Teste = {
   referencia: string;
 };
 
+type ParamProps = {
+  situacao: number | null | undefined;
+  dataInicial: string | undefined;
+  dataFinal: string | undefined;
+};
+
+type UpdateChamado = {
+  motivo: string;
+  situacao: number;
+  id: number;
+};
+
 // Funções que buscam os chamados do usuário registrado.
 export async function GetChamados({
-  selectedSituation,
-  dataInicial,
-  dataFinal
+  params
 }: {
-  selectedSituation: number | null;
-  dataInicial?: string;
-  dataFinal?: string;
+  params: ParamProps | undefined;
 }) {
   const response = await api.get(process.env.NEXT_PUBLIC_API_GET_CHAMADOS_URL, {
-    params: {
-      situacao: selectedSituation ?? '',
-      dataInicial: dataInicial ?? '',
-      dataFinal: dataFinal ?? ''
-    }
+    params: params
   });
 
   return response.data;
@@ -40,6 +44,20 @@ export async function PostChamado(data: Teste) {
   const response = await api.post(
     process.env.NEXT_PUBLIC_API_GET_CHAMADOS_URL,
     data
+  );
+
+  return response.data;
+}
+
+export async function UpdateChamado(data: UpdateChamado) {
+  const response = await api.put(
+    `${process.env.NEXT_PUBLIC_API_GET_CHAMADOS_URL}/${data.id}/${data.situacao}`,
+    data,
+    {
+      params: {
+        motivo: data.motivo
+      }
+    }
   );
 
   return response.data;

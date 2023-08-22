@@ -2,23 +2,22 @@
 
 import { ReactNode, useEffect, useState } from 'react';
 import { AuthContext } from '@/contexts/Auth';
-import { SetItemCookies } from '@/Utils/setTokenCookies';
-import { IUser, SignInData } from '@/interfaces/auth/IAuthUserContext';
-import { destroyCookie } from 'nookies';
+import { IUser, Role, SignInData } from '@/interfaces/auth/IAuthUserContext';
 import { useRouter } from 'next/navigation';
 import { SignInService } from '@/services/auth';
 import { GetItemCookies } from '@/Utils/getTokenCookies';
+import { deleteCookie, setCookie } from 'cookies-next';
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const router = useRouter();
-  const [user, setUser] = useState<IUser | null>(null);
-  const token = GetItemCookies('SinalizaAi.token');
 
+  const [user, setUser] = useState<IUser | null>(null);
   const isAuthenticated = !!user;
+  const token = GetItemCookies('SinalizaAi.token');
 
   useEffect(() => {
     const getUserName = GetItemCookies('SinalizaAi.user.nome') || '';
-    const getUserRole = GetItemCookies('SinalizaAi.user.role') || '';
+    const getUserRole = GetItemCookies('SinalizaAi.user.role') as Role;
 
     if (token) {
       setUser({ nome: getUserName, role: getUserRole });
@@ -35,34 +34,37 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       return;
     }
 
-    /*
-     Caso não for capturado algum erro e a API retornar o token do usuário
-      eu vou inserir-lo dentro dos cookies
-    */
-    if (data.response?.token) {
-      SetItemCookies('SinalizaAi.token', data.response.token, {
+    if (!data.response) {
+      throw new Error('Erro interno atenção');
+    }
+
+    if (!data.response.token) {
+      throw new Error('Erro interno atenção');
+    }
+
+    if (data.response.token) {
+      setCookie('SinalizaAi.token', data.response.token, {
         maxAge: 60 * 60 * 3 // 3 hour
       });
-    }
 
-    if (data.response?.nome) {
-      SetItemCookies('SinalizaAi.user.nome', data.response.nome);
-    }
+      setCookie('SinalizaAi.user.nome', data.response.nome);
+      setCookie('SinalizaAi.user.role', data.response.role);
 
-    if (data.response?.role) {
-      SetItemCookies('SinalizaAi.user.role', data.response.role);
-    }
+      setUser({
+        nome: data.response.nome,
+        role: data.response.role
+      });
 
-    router.push('/user/dashboard');
+      router.push('/user/dashboard');
+    }
   }
 
   function logout() {
-    console.log('usuário deslogado');
-    destroyCookie({}, 'SinalizaAi.token');
-    destroyCookie({}, 'SinalizaAi.user.nome');
-    destroyCookie({}, 'SinalizaAi.user.role');
-
     setUser(null);
+
+    deleteCookie('SinalizaAi.token');
+    deleteCookie('SinalizaAi.user.nome');
+    deleteCookie('SinalizaAi.user.role');
 
     router.push('/signin');
   }

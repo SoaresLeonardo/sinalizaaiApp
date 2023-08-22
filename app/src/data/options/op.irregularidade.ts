@@ -10,7 +10,7 @@ export const optionsIrregularidade: OptionProps[] = [
     value: 1
   },
   {
-    text: 'QuebraMola',
+    text: 'Quebra-Mola',
     value: 2
   },
   {

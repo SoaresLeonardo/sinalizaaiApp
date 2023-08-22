@@ -1,14 +1,13 @@
-import { useSidebar } from '@/hooks/sidebar';
-import { BookOpen, MapTrifold, UserPlus } from 'phosphor-react';
-import { CheckGeoInfos } from '@/Utils/checkGeoInfos';
+import { Binoculars, BookOpen, MapTrifold } from 'phosphor-react';
 import { useGeoLocation } from '@/hooks/geoLocation';
+import { CheckGeoInfos } from '@/Utils/checkGeoInfos';
+import { useSidebar } from '@/hooks/sidebar';
+import { useModal } from '@/hooks/modal';
+import sidebarImage from '../../../public/sidebarImage.svg';
+import ActiveLinks from '../ActiveLinks';
 import clsx from 'clsx';
 import Button from '../Button';
 import Image from 'next/image';
-import sidebarImage from '../../../public/sidebarImage.svg';
-import { useModal } from '@/hooks/modal';
-import ActiveLinks from '../ActiveLinks';
-import { useAuth } from '@/hooks/auth';
 
 type LinkProps = {
   name: string;
@@ -39,18 +38,17 @@ export const Sidebar = () => {
   // Ou posso obter o resultado já atualizado contendo X e Y definidos
   const { latitudes } = useGeoLocation();
 
-  const { user } = useAuth();
-
   return (
     <aside
       className={clsx(
-        `p-3 border-r lg:static w-[80%] border-r-gray-900 col-span-1 fixed top-0 lg:w-full bottom-0 bg-[#0a0f17] transition-transform duration-300 overflow-y-scroll z-10`,
+        `p-3 border-r lg:static w-[80%] border-r-gray-200 col-span-1 fixed top-0 lg:w-full bottom-0 bg-white transition-transform duration-300 overflow-y-scroll z-10`,
         open ? '-left-0' : '-left-full'
       )}
     >
       <div className="text-center p-8">
-        <h1 className="text-base font-bold uppercase text-zinc-50">
-          Sinaliza Ai
+        <h1 className="text-base font-bold uppercase text-zinc-800 flex flex-col items-center space-y-2">
+          <Binoculars size={28} />
+          <span>Sinaliza_Ai</span>
         </h1>
       </div>
       {/* Menu */}
@@ -65,16 +63,6 @@ export const Sidebar = () => {
                 </ActiveLinks>
               </li>
             ))}
-            {user?.role === 'Administrador' && (
-              <>
-                <li>
-                  <ActiveLinks href="/admin/dashboard">
-                    <UserPlus size={20} />
-                    <span>Administrador</span>
-                  </ActiveLinks>
-                </li>
-              </>
-            )}
           </ul>
         </nav>
         {/*Imagem do Sidebar & Botão de abrir chamado*/}
@@ -84,12 +72,13 @@ export const Sidebar = () => {
             alt="Sidebar Image"
             className="w-full h-auto"
           />
-          <div className="flex flex-col items-center justify-center text-center bg-[#242c37] space-y-4 px-6 py-11 rounded-xl">
-            <h1 className="font-bold text-zinc-100">Algum problema?</h1>
-            <p className="text-gray-400 text-sm">
+          <div className="flex flex-col items-center justify-center text-center bg-[#e4e9eb9c] space-y-4 px-6 py-11 rounded-xl">
+            <h1 className="font-bold text-zinc-800">Algum problema?</h1>
+            <p className="text-gray-700 text-sm">
               Abra um chamado para que nossos agentes consigam localizar o
               problema o mais rápido possivél.
             </p>
+            {/*Botão quea abre o modal Para criar um chamado/com validações para saber se os dados necessários foram preenchidos*/}
             <Button
               disabled={CheckGeoInfos(
                 latitudes.geoInfo.latitudeX,

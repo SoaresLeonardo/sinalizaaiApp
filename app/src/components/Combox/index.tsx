@@ -9,12 +9,12 @@ type OptionProps = {
 
 type ComboxProps = {
   options: OptionProps[];
-  selected: OptionProps;
+  selected: OptionProps | null | undefined;
   static?: boolean;
   setSelected: Dispatch<
     SetStateAction<{
       option: OptionProps;
-    }>
+    } | null>
   >;
 };
 const Combox = ({ options, selected, setSelected, ...props }: ComboxProps) => {
@@ -23,38 +23,40 @@ const Combox = ({ options, selected, setSelected, ...props }: ComboxProps) => {
     setIsOpen(!isOpen);
   };
   return (
-    <div className={props.static ? 'relative' : ''}>
-      <button
-        className="bg-[#242c37] p-3 rounded-sm outline-none text-zinc-50 border border-gray-600 w-44 flex items-center justify-between text-sm"
-        onClick={handleOpenCombox}
-      >
-        <span>{selected?.text}</span>
-        {isOpen ? <CaretUp size={15} /> : <CaretDown size={15} />}
-      </button>
-      {isOpen && (
-        <>
-          <div
-            className={clsx(
-              `bg-[#242c37] p-3 rounded-sm outline-none text-zinc-50 border border-gray-600 w-44 mt-2`,
-              props.static ? 'absolute' : ''
-            )}
-          >
-            {options.map((option, i) => (
-              <span
-                key={i}
-                onClick={() => {
-                  setSelected({ option });
-                  setIsOpen(false);
-                }}
-                className="block p-2 hover:bg-[#333c49] cursor-pointer rounded-sm text-sm"
-              >
-                {option.text}
-              </span>
-            ))}
-          </div>
-        </>
-      )}
-    </div>
+    <>
+      <div className={props.static ? 'relative' : ''}>
+        <button
+          className="bg-white p-3 rounded-lg outline-none text-zinc-800 border border-[#08122515] w-full flex items-center justify-between text-sm"
+          onClick={handleOpenCombox}
+        >
+          <span>{selected?.text ? selected.text : 'Selecione'}</span>
+          {isOpen ? <CaretUp size={15} /> : <CaretDown size={15} />}
+        </button>
+        {isOpen && (
+          <>
+            <div
+              className={clsx(
+                `bg-white p-3 rounded-lg z-20 outline-none text-gray-700 border border-[#08122515] w-full mt-2`,
+                props.static ? 'absolute' : ''
+              )}
+            >
+              {options.map((option, i) => (
+                <span
+                  key={i}
+                  onClick={() => {
+                    setSelected({ option });
+                    setIsOpen(false);
+                  }}
+                  className="block p-3 hover:bg-gray-100 cursor-pointer rounded-sm text-sm"
+                >
+                  {option.text}
+                </span>
+              ))}
+            </div>
+          </>
+        )}
+      </div>
+    </>
   );
 };
 

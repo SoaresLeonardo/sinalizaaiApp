@@ -2,14 +2,14 @@ import { ComponentProps } from 'react';
 import { VariantProps, tv } from 'tailwind-variants';
 
 const button = tv({
-  base: 'flex items-center justify-center text-sm focus:ring-2 rounded-lg disabled-[disabled=true]:bg-gray-300',
+  base: 'flex items-center justify-center transition text-sm focus:ring-2 rounded-lg disabled-[disabled=true]:bg-gray-300',
   variants: {
     size: {
       default: 'px-5 py-3',
       sm: 'px-4 py-2'
     },
     color: {
-      default: 'bg-[#7E3AF2] text-white hover:bg-[#8d4ff8]',
+      default: 'bg-[#081225] text-white hover:bg-[#081225e4]',
       secundary: 'bg-transparent'
     }
   },

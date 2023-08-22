@@ -1,8 +1,14 @@
-import { ISignInRequest } from '@/interfaces/auth/IAuthSignInService';
+import {
+  ISignInRequest,
+  ISignInResponse
+} from '@/interfaces/auth/IAuthSignInService';
 import { api } from '../api';
 import { AxiosError } from 'axios';
 
-export async function SignInService({ email, senha }: ISignInRequest) {
+export async function SignInService({
+  email,
+  senha
+}: ISignInRequest): Promise<ISignInResponse> {
   try {
     const response = await api.get(process.env.NEXT_PUBLIC_API_SIGNIN_URL, {
       params: {
@@ -22,14 +28,16 @@ export async function SignInService({ email, senha }: ISignInRequest) {
       return {
         data: {
           error: true,
-          msg: error.response?.data.error
+          msg: error.response?.data.error,
+          response: null
         }
       };
     }
     return {
       data: {
         error: true,
-        msg: 'Erro interno'
+        msg: 'Erro interno',
+        response: null
       }
     };
   }
