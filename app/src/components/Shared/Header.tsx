@@ -14,11 +14,8 @@ export const Header = () => {
                 <User size={20} className="text-indigo-600" />
               </div>
               <div className="flex flex-col">
-                <h1 className="font-semibold text-zinc-800">{user?.nome}</h1>
-                <span className="text-xs text-zinc-500">
-                  {user && user.role === 'Cidadao' && 'Cidadão'}
-                  {user && user.role === 'Administrador' && 'Administrador'}
-                </span>
+                <h1 className="font-semibold text-zinc-800">{user.nome}</h1>
+                <span className="text-xs text-zinc-500">{user.role}</span>
               </div>
             </>
           ) : (
