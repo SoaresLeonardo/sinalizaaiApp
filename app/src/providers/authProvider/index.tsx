@@ -13,9 +13,13 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const [user, setUser] = useState<IUser | null>(null);
   const isAuthenticated = !!user;
+
   const token = GetItemCookies('SinalizaAi.token');
 
+  // Função que atualiza os dados do usuário quando a página recarrega;
+  //Enquanto eu tiver um token(necessariamente estou autenticado)
   useEffect(() => {
+    // Buscando os dados dos cookies
     const getUserName = GetItemCookies('SinalizaAi.user.nome') || '';
     const getUserRole = GetItemCookies('SinalizaAi.user.role') as Role;
 
@@ -34,6 +38,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       return;
     }
 
+    // Caso não ouver nenhuma resposta com os dados do usuário(dados importantes) eu envio um erro para a aplicação inteira
     if (!data.response) {
       throw new Error('Erro interno atenção');
     }
@@ -42,11 +47,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       throw new Error('Erro interno atenção');
     }
 
-    if (data.response.token) {
-      setCookie('SinalizaAi.token', data.response.token, {
-        maxAge: 60 * 60 * 3 // 3 hour
-      });
-
+    if (data.response) {
+      setCookie('SinalizaAi.token', data.response.token);
       setCookie('SinalizaAi.user.nome', data.response.nome);
       setCookie('SinalizaAi.user.role', data.response.role);
 
