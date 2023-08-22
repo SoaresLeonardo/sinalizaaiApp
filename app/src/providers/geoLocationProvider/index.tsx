@@ -1,5 +1,3 @@
-'use client';
-
 import { GeoLocationContext } from '@/contexts/GeoLocation';
 import { GeografInfos } from '@/interfaces/IGeoLocationContext';
 import { ReactNode, useState } from 'react';

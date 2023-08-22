@@ -1,5 +1,3 @@
-'use client';
-
 import { ReactNode, useEffect, useState } from 'react';
 import { AuthContext } from '@/contexts/Auth';
 import { IUser, Role, SignInData } from '@/interfaces/auth/IAuthUserContext';

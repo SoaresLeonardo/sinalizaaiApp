@@ -1,5 +1,3 @@
-'use client';
-
 import { SidebarContext } from '@/contexts/Sidebar';
 import { ReactNode, useState } from 'react';
 

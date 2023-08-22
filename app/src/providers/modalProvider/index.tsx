@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-'use client';
 
 import { ModalContext } from '@/contexts/Modal';
 import { ReactNode, useState } from 'react';
