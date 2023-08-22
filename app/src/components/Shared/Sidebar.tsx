@@ -8,6 +8,7 @@ import ActiveLinks from '../ActiveLinks';
 import clsx from 'clsx';
 import Button from '../Button';
 import Image from 'next/image';
+import { useAuth } from '@/hooks/auth';
 
 type LinkProps = {
   name: string;
@@ -29,6 +30,8 @@ const navLinks: LinkProps[] = [
 ];
 
 export const Sidebar = () => {
+  const { user } = useAuth();
+
   // Estado da sidebar Open / close Global
   const { open } = useSidebar();
   // Estado do modal Open / Close Global
@@ -66,30 +69,34 @@ export const Sidebar = () => {
           </ul>
         </nav>
         {/*Imagem do Sidebar & Botão de abrir chamado*/}
-        <div className="flex flex-col gap-4">
-          <Image
-            src={sidebarImage}
-            alt="Sidebar Image"
-            className="w-full h-auto"
-          />
-          <div className="flex flex-col items-center justify-center text-center bg-[#e4e9eb9c] space-y-4 px-6 py-11 rounded-xl">
-            <h1 className="font-bold text-zinc-800">Algum problema?</h1>
-            <p className="text-gray-700 text-sm">
-              Abra um chamado para que nossos agentes consigam localizar o
-              problema o mais rápido possivél.
-            </p>
-            {/*Botão quea abre o modal Para criar um chamado/com validações para saber se os dados necessários foram preenchidos*/}
-            <Button
-              disabled={CheckGeoInfos(
-                latitudes.geoInfo.latitudeX,
-                latitudes.geoInfo.latitudeY
-              )}
-              onClick={() => setOpen(!openModal)}
-            >
-              Abrir chamado
-            </Button>
-          </div>
-        </div>
+        {user && user.role === 'Cidadao' && (
+          <>
+            <div className="flex flex-col gap-4">
+              <Image
+                src={sidebarImage}
+                alt="Sidebar Image"
+                className="w-full h-auto"
+              />
+              <div className="flex flex-col items-center justify-center text-center bg-[#e4e9eb9c] space-y-4 px-6 py-11 rounded-xl">
+                <h1 className="font-bold text-zinc-800">Algum problema?</h1>
+                <p className="text-gray-700 text-sm">
+                  Abra um chamado para que nossos agentes consigam localizar o
+                  problema o mais rápido possivél.
+                </p>
+                {/*Botão quea abre o modal Para criar um chamado/com validações para saber se os dados necessários foram preenchidos*/}
+                <Button
+                  disabled={CheckGeoInfos(
+                    latitudes.geoInfo.latitudeX,
+                    latitudes.geoInfo.latitudeY
+                  )}
+                  onClick={() => setOpen(!openModal)}
+                >
+                  Abrir chamado
+                </Button>
+              </div>
+            </div>
+          </>
+        )}
       </div>
     </aside>
   );
