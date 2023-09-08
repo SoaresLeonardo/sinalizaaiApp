@@ -30,7 +30,12 @@ const Combox = ({ options, selected, setSelected, ...props }: ComboxProps) => {
           onClick={handleOpenCombox}
         >
           <span>{selected?.text ? selected.text : 'Selecione'}</span>
-          {isOpen ? <CaretUp size={15} /> : <CaretDown size={15} />}
+          <div className="flex items-center space-x-2">
+            <strong className="bg-indigo-600 rounded-full w-5 h-5 text-white text-xs p-2 flex items-center justify-center text-center">
+              {options.length}
+            </strong>
+            {isOpen ? <CaretUp size={15} /> : <CaretDown size={15} />}
+          </div>
         </button>
         {isOpen && (
           <>

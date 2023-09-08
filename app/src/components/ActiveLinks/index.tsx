@@ -4,20 +4,25 @@ import { usePathname } from 'next/navigation';
 import clsx from 'clsx';
 type Props = {
   children: ReactNode;
+  params: {
+    id: string[];
+  };
 } & LinkProps;
 
-const ActiveLinks = ({ children, href, ...props }: Props) => {
+const ActiveLinks = ({ children, href, params, ...props }: Props) => {
   const pathname = usePathname();
 
-  const isCurrentPath = pathname === href;
+  const isCurrentPathParams = pathname === `${href}/${params.id}`;
+
+  const isCurrentPath = pathname === href || isCurrentPathParams;
   return (
     <Link href={href} {...props} passHref legacyBehavior>
       <a
         className={clsx(
-          `flex items-center rounded-lg p-3 cursor-pointer transition duration-150 text-base font-semibold space-x-4`,
+          `flex items-center rounded-md p-3 cursor-pointer transition duration-150 text-base space-x-7`,
           isCurrentPath
-            ? 'bg-[#0812250a] text-indigo-600'
-            : 'hover:bg-gray-100 hover:text-gray-800 text-gray-800'
+            ? 'bg-indigo-600 text-white'
+            : 'hover:bg-gray-900 hover:text-indigo-500 text-gray-400'
         )}
       >
         {children}

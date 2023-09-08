@@ -1,4 +1,4 @@
-import { Binoculars, BookOpen, MapTrifold } from 'phosphor-react';
+import { BookOpen, Compass, MapTrifold } from 'phosphor-react';
 import { useGeoLocation } from '@/hooks/geoLocation';
 import { CheckGeoInfos } from '@/Utils/checkGeoInfos';
 import { useSidebar } from '@/hooks/sidebar';
@@ -9,6 +9,7 @@ import clsx from 'clsx';
 import Button from '../Button';
 import Image from 'next/image';
 import { useAuth } from '@/hooks/auth';
+import { useParams } from 'next/navigation';
 
 type LinkProps = {
   name: string;
@@ -41,17 +42,19 @@ export const Sidebar = () => {
   // Ou posso obter o resultado já atualizado contendo X e Y definidos
   const { latitudes } = useGeoLocation();
 
+  const { id } = useParams();
+
   return (
     <aside
       className={clsx(
-        `p-3 border-r lg:static w-[80%] border-r-gray-200 col-span-1 fixed top-0 lg:w-full bottom-0 bg-white transition-transform duration-300 overflow-y-scroll z-10`,
+        `p-3 lg:static w-[80%] col-span-1 fixed top-0 lg:w-full bottom-0 bg-[#0f1217] transition-transform duration-300 overflow-y-scroll z-10`,
         open ? '-left-0' : '-left-full'
       )}
     >
       <div className="text-center p-8">
-        <h1 className="text-base font-bold uppercase text-zinc-800 flex flex-col items-center space-y-2">
-          <Binoculars size={28} />
-          <span>Sinaliza_Ai</span>
+        <h1 className="text-lg font-medium text-indigo-600 flex items-center space-x-2">
+          <Compass size={27} />
+          <span className="text-white">Sinaliza Ai</span>
         </h1>
       </div>
       {/* Menu */}
@@ -60,7 +63,12 @@ export const Sidebar = () => {
           <ul className="flex flex-col space-y-5">
             {navLinks.map((navLink) => (
               <li key={navLink.name}>
-                <ActiveLinks href={navLink.href} passHref legacyBehavior>
+                <ActiveLinks
+                  href={navLink.href}
+                  passHref
+                  legacyBehavior
+                  params={{ id: id }}
+                >
                   {navLink.icon}
                   <span>{navLink.name}</span>
                 </ActiveLinks>
@@ -77,20 +85,14 @@ export const Sidebar = () => {
                 alt="Sidebar Image"
                 className="w-full h-auto"
               />
-              <div className="flex flex-col items-center justify-center text-center bg-[#e4e9eb9c] space-y-4 px-6 py-11 rounded-xl">
-                <h1 className="font-bold text-zinc-800">Algum problema?</h1>
-                <p className="text-gray-700 text-sm">
+              <div className="flex flex-col items-center justify-center text-center bg-[#14181f] space-y-4 px-6 py-11 rounded-xl">
+                <h1 className="font-bold text-white">Algum problema?</h1>
+                <p className="text-gray-500 text-sm">
                   Abra um chamado para que nossos agentes consigam localizar o
                   problema o mais rápido possivél.
                 </p>
                 {/*Botão quea abre o modal Para criar um chamado/com validações para saber se os dados necessários foram preenchidos*/}
-                <Button
-                  disabled={CheckGeoInfos(
-                    latitudes.geoInfo.latitudeX,
-                    latitudes.geoInfo.latitudeY
-                  )}
-                  onClick={() => setOpen(!openModal)}
-                >
+                <Button onClick={() => setOpen(!openModal)}>
                   Abrir chamado
                 </Button>
               </div>

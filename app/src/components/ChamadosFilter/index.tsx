@@ -23,22 +23,23 @@ export function ChamadosFilter({ setFilter }: Props) {
 
     // Fazendo uma validação para verificar se algum dado de filtro foi setado
     const selectedItemValidation =
-      dataInicial || dataFinal || comboxSelected?.option ? true : false;
+      dataInicial || dataFinal || comboxSelected ? true : false;
 
     if (selectedItemValidation) {
-      setFilter({
+      setFilter((prevFilter) => ({
+        ...prevFilter,
         datas: {
           dataInicial: formatFunc(dataInicial),
           dataFinal: formatFunc(dataFinal)
         },
         situacao: comboxSelected?.option.value
-      });
+      }));
     }
   };
   return (
     <form
       onSubmit={handleSubmit(handleFilterChamados)}
-      className=" bg-white p-5 rounded-lg shadow-sm"
+      className="bg-white p-5 rounded-lg shadow-md"
     >
       <div className="flex items-center lg:flex-row flex-col lg:justify-between justify-center gap-4">
         <div className="flex lg:flex-row flex-col items-center flex-wrap gap-4 lg:w-auto w-full">

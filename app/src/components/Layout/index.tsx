@@ -19,7 +19,7 @@ const Layout: React.FC<Props> = ({ children }) => {
       {/* Sidebar Component */}
       <Sidebar />
       {/* Content */}
-      <div className="col-span-5 bg-gray-100">
+      <div className="col-span-5 bg-gray-50">
         {/* Header Component */}
         <Header />
         {/* Main Content */}
@@ -28,7 +28,7 @@ const Layout: React.FC<Props> = ({ children }) => {
       {/*Menu Sidebar*/}
       <button
         onClick={() => setOpen(!open)}
-        className="block lg:hidden fixed bottom-4 right-4 bg-[#081225] p-2 text-zinc-50 rounded-full"
+        className="block lg:hidden fixed bottom-4 right-4 bg-indigo-600 p-2 text-zinc-50 rounded-full"
       >
         {open ? <X size={20} /> : <List size={20} />}
       </button>

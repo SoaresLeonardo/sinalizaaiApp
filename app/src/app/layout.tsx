@@ -1,14 +1,18 @@
 import './globals.css';
 import type { Metadata } from 'next';
-import { Inter } from 'next/font/google';
+import { Roboto } from 'next/font/google';
 
-import AppProvider from '@/providers';
+import { ProviderAplication } from '@/contexts/provider';
 
-const inter = Inter({ subsets: ['latin'] });
+const roboto = Roboto({
+  subsets: ['latin'],
+  weight: ['100', '300', '400', '500', '700']
+});
 
 export const metadata: Metadata = {
-  title: 'Sinaliza_Ai',
-  description: 'Abra seus chamados!'
+  title: 'Sinaliza Ai',
+  description:
+    'Bem-vindo ao Sinaliza AI, um programa que permite aos usuários reportar problemas em determinadas localidades, juntamente com detalhes específicos sobre a questão. Dessa forma, podemos trabalhar para resolver o problema o mais rápido possível.'
 };
 
 export default function RootLayout({
@@ -18,8 +22,8 @@ export default function RootLayout({
 }) {
   return (
     <html lang="pt-BR">
-      <body className={inter.className}>
-        <AppProvider>{children}</AppProvider>
+      <body className={roboto.className}>
+        <ProviderAplication>{children}</ProviderAplication>
       </body>
     </html>
   );

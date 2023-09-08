@@ -11,6 +11,7 @@ import { useAuth } from '@/hooks/auth';
 import { Modal } from '@/components/Modal';
 import Button from '@/components/Button';
 import Combox from '@/components/Combox';
+import { GetLocalizationAPI } from '@/services/getLocalization';
 
 export type ErrorProps = {
   msg?: string | null;
@@ -52,14 +53,28 @@ export function UserActions() {
     }
   });
 
-  const handleSubmitCreateChamado = () => {
+  const getEndereco = async () => {
+    const endereco = await GetLocalizationAPI({
+      lat: latitudes.geoInfo.latitudeX || '',
+      lng: latitudes.geoInfo.latitudeY || ''
+    });
+
+    const streetName = endereco.address.road;
+
+    return {
+      rua: streetName
+    };
+  };
+
+  const handleSubmitCreateChamado = async () => {
     // Dados do chamado a ser criado
+    const { rua } = await getEndereco();
     const dataSelected = {
       tipoIrregularidade: selected?.option.value || 0,
-      latitude: latitudes.geoInfo.latitudeX || '',
-      longitude: latitudes.geoInfo.latitudeY || '',
-      endereco: 'João cardoso',
-      referencia: 'Bar da da bruna'
+      latitude: `${latitudes.geoInfo.latitudeX}` || '',
+      longitude: `${latitudes.geoInfo.latitudeY}` || '',
+      endereco: rua,
+      referencia: 'Teste'
     };
 
     // Caso o usuário caia nessa condição, possivelmente ele é um administrador ou não tem uma role
@@ -91,8 +106,8 @@ export function UserActions() {
   };
 
   // Função que é chamada ao confirmar a criação do chamado
-  const createChamadoAction = () => {
-    const result = handleSubmitCreateChamado();
+  const createChamadoAction = async () => {
+    const result = await handleSubmitCreateChamado();
 
     // Caso seja capturado algum retorno com erro na função, o modal de erro irá abrir com as seguintes informações:
     if (result?.error) {
@@ -200,15 +215,32 @@ export function UserActions() {
       {/*Modal de sucesso */}
       <Modal.Root isOpen={openModalSuccess}>
         <Modal.Content>
-          <div className="flex flex-col gap-8 items-center justify-center p-5 m-8">
-            <div className="text-green-500">
-              <CheckCircle size={68} />
+          <div className="flex flex-col gap-4 items-center justify-center p-3">
+            <div className="text-emerald-500">
+              <CheckCircle size={54} />
             </div>
-            <div className="text-center flex flex-col items-center justify-center">
+            <div className="text-center flex flex-col space-y-3 items-center justify-center">
               <h1 className="font-bold text-xl">Sucesso</h1>
               <p className="text-sm text-gray-700">
                 Seu chamado foi criado com sucesso!
               </p>
+            </div>
+            <div className="max-w-md bg-gray-100 p-4 rounded-lg flex flex-col gap-4">
+              <div className=" space-y-2">
+                <h4 className="font-semibold text-base">E agora?</h4>
+                <p className="text-sm text-gray-600">
+                  Agradecemos por nos informar sobre a questão. Seu chamado foi
+                  enviado e estaremos trabalhando para resolvê-lo o mais breve
+                  possível!
+                </p>
+              </div>
+              <div className=" space-y-2">
+                <h4 className="font-semibold text-base">Mais</h4>
+                <p className="text-sm text-gray-600">
+                  Para obter mais informações, fique atento à página /chamados.
+                  Estamos empenhados em melhorar constantemente.
+                </p>
+              </div>
             </div>
           </div>
         </Modal.Content>
