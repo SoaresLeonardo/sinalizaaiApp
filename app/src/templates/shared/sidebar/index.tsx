@@ -1,15 +1,15 @@
 import { BookOpen, Compass, MapTrifold } from 'phosphor-react';
-import { useGeoLocation } from '@/hooks/geoLocation';
-import { CheckGeoInfos } from '@/Utils/checkGeoInfos';
 import { useSidebar } from '@/hooks/sidebar';
 import { useModal } from '@/hooks/modal';
-import sidebarImage from '../../../public/sidebarImage.svg';
-import ActiveLinks from '../ActiveLinks';
+
 import clsx from 'clsx';
-import Button from '../Button';
-import Image from 'next/image';
+
 import { useAuth } from '@/hooks/auth';
 import { useParams } from 'next/navigation';
+import ActiveLinks from '@/components/ActiveLinks';
+import Button from '@/components/Button';
+import { CheckGeoInfos } from '@/functions/check-geoinfos';
+import { useGeoLocation } from '@/hooks/geoLocation';
 
 type LinkProps = {
   name: string;
@@ -32,6 +32,7 @@ const navLinks: LinkProps[] = [
 
 export const Sidebar = () => {
   const { user } = useAuth();
+  const { latitudes } = useGeoLocation();
 
   // Estado da sidebar Open / close Global
   const { open } = useSidebar();
@@ -40,7 +41,6 @@ export const Sidebar = () => {
   // Este é onde tem os dados que vem da interação do usuario com o mapa,
   // Abaixo estou apenas buscando as informações que inicialmente tanto X e Y possam ser Null,
   // Ou posso obter o resultado já atualizado contendo X e Y definidos
-  const { latitudes } = useGeoLocation();
 
   const { id } = useParams();
 
@@ -80,8 +80,8 @@ export const Sidebar = () => {
         {user && user.role === 'Cidadao' && (
           <>
             <div className="flex flex-col gap-4">
-              <Image
-                src={sidebarImage}
+              <img
+                src="/img/sidebarImage.svg"
                 alt="Sidebar Image"
                 className="w-full h-auto"
               />
@@ -92,7 +92,17 @@ export const Sidebar = () => {
                   problema o mais rápido possivél.
                 </p>
                 {/*Botão quea abre o modal Para criar um chamado/com validações para saber se os dados necessários foram preenchidos*/}
-                <Button onClick={() => setOpen(!openModal)}>
+                <Button
+                  onClick={() => setOpen(!openModal)}
+                  disabled={
+                    CheckGeoInfos({
+                      lat: latitudes.geoInfo.latitudeX,
+                      lng: latitudes.geoInfo.latitudeY
+                    })
+                      ? false
+                      : true
+                  }
+                >
                   Abrir chamado
                 </Button>
               </div>

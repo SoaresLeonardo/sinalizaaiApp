@@ -1,9 +1,5 @@
-import { DashboardMap } from '@/components/_DashboardMap';
+import Dashboard from '@/templates/user/auth/dashboard';
 
-export default function DashboardUserPage() {
-  return (
-    <div className="w-full h-[50rem]">
-      <DashboardMap />
-    </div>
-  );
+export default function DashboardPage() {
+  return <Dashboard />;
 }

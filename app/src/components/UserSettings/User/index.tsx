@@ -1,5 +1,4 @@
 import { CheckCircle, Spinner, WarningCircle, X } from 'phosphor-react';
-import { optionsIrregularidade } from '@/data/options/op.irregularidade';
 import { IrregularidadeIcon } from '@/components/IrregularidadeIcon';
 import { useGeoLocation } from '@/hooks/geoLocation';
 import { OptionProps } from '@/data/options/op.type';
@@ -12,13 +11,14 @@ import { Modal } from '@/components/Modal';
 import Button from '@/components/Button';
 import Combox from '@/components/Combox';
 import { GetLocalizationAPI } from '@/services/getLocalization';
+import { optionsIrregularidade } from '@/constants/options-selected/irregularidades-op';
 
 export type ErrorProps = {
   msg?: string | null;
   stateModal: boolean;
 };
 
-export function UserActions() {
+export function User() {
   // Meus states principais
   const { open: openModal, setOpen: setOpenModal } = useModal();
   const { latitudes, setLatitudes } = useGeoLocation();
@@ -55,8 +55,8 @@ export function UserActions() {
 
   const getEndereco = async () => {
     const endereco = await GetLocalizationAPI({
-      lat: latitudes.geoInfo.latitudeX || '',
-      lng: latitudes.geoInfo.latitudeY || ''
+      lat: latitudes.geoInfo.latitudeX || 0,
+      lng: latitudes.geoInfo.latitudeY || 0
     });
 
     const streetName = endereco.address.road;

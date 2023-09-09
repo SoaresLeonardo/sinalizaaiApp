@@ -16,9 +16,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const router = useRouter();
 
   const [user, setUser] = useState<IUser | null>(null);
-  const isAuthenticated = !!user;
 
   const token = GetItemCookies('SinalizaAi.token');
+  const isAuthenticated = !!user;
 
   // Função que atualiza os dados do usuário quando a página recarrega;
   //Enquanto eu tiver um token(necessariamente estou autenticado)

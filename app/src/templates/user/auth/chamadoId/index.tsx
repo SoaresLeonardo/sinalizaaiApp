@@ -1,19 +1,15 @@
 'use client';
 
+import { SituaçãoProps } from '@/@types';
+import Button from '@/components/Button';
+import StateChamadoTextBox from '@/components/StateChamado/StateChamadoTextBox';
+import { Admin } from '@/components/UserSettings/Admin';
+import { useAuth } from '@/hooks/auth';
 import { IChamadoByIdService } from '@/interfaces/chamados/IGetchamados.id.service';
 import { GetChamadosByID } from '@/services/chamados';
-import { SituaçãoProps } from '@/@types';
-import { useQuery } from 'react-query';
-import StateChamadoTextBox from './StateChamado/StateChamadoTextBox';
-import ChamadoDetailsSkeleton from './Skeletons/ChamadoDetails';
-import { useAuth } from '@/hooks/auth';
-import Button from './Button';
-
-import { UserAdminSettings } from './Layout/Admin';
+import { CircleNotch } from 'phosphor-react';
 import { useState } from 'react';
-
-import updateChamadoImage from '../../public/statusUpdate.svg';
-import Image from 'next/image';
+import { useQuery } from 'react-query';
 
 type Props = {
   params: {
@@ -21,7 +17,7 @@ type Props = {
   };
 };
 
-export function ChamadosDetails({ params }: Props) {
+const ChamadosById = ({ params }: Props) => {
   const { user } = useAuth();
 
   //Modal do administrador
@@ -34,6 +30,8 @@ export function ChamadosDetails({ params }: Props) {
     GetChamadosByID({ id: params.id })
   );
 
+  // Verificação se o usuário tem a autorização de fazer o update do chamado
+  // Verficando a role & o estado atual do chamado(caso for finalizado não será exibida) como se a role !== 'admin'
   const permitionAndStateeValidation =
     user &&
     user.role === 'Administrador' &&
@@ -44,11 +42,18 @@ export function ChamadosDetails({ params }: Props) {
   return (
     <>
       <div className="max-w-7xl mx-auto w-full lg:px-4 p-2 mt-10">
-        <div className="p-5 rounded-lg overflow-auto h-96 bg-white">
-          <div className="flex flex-col">
-            {isLoading && <ChamadoDetailsSkeleton />}
-            {!isLoading && (
-              <>
+        {isLoading && (
+          <>
+            <div className="flex items-center justify-center flex-col space-y-3">
+              <CircleNotch size={40} className="animate-spin" />
+              <span className="text-gray-600">Buscando as informações...</span>
+            </div>
+          </>
+        )}
+        {!isLoading && (
+          <>
+            <div className="p-5 rounded-lg overflow-auto h-96 bg-white">
+              <div className="flex flex-col">
                 <div className="p-5 mt-4">
                   <div className="border-t border-t-[#E4E9EB]">
                     <dl className="divide-y divide-[#E4E9EB]">
@@ -129,67 +134,69 @@ export function ChamadosDetails({ params }: Props) {
                     </dl>
                   </div>
                 </div>
-              </>
-            )}
-            {!isLoading && (
-              <>
-                <div className="bg-gray-50 p-3 rounded-lg">
-                  <div className="flex flex-col space-y-10 mt-11">
-                    <h1 className="sm:text-2xl text-xl font-bold text-zinc-800">
-                      Histórico do chamado
-                    </h1>
-                  </div>
-                  <div className="mt-11">
-                    <div>
-                      <table className="w-full">
-                        <thead className="bg-indigo-600 border-b border-b-gray-300">
-                          <tr>
-                            <th className="font-semibold p-2 text-white text-left">
-                              data
-                            </th>
-                            <th className="font-semibold p-2 text-white text-left">
-                              Descrição
-                            </th>
-                            <th className="font-semibold p-2 text-white text-left">
-                              Situação
-                            </th>
-                          </tr>
-                        </thead>
-                        <tbody className="divide-y divide-[#E4E9EB] bg-white">
-                          {chamadosDetails?.data.historico.map(
-                            (stateChamado, i) => (
-                              <tr key={i}>
-                                <td className="p-2 text-sm text-gray-700">
-                                  {stateChamado.data}
-                                </td>
-                                <td className="p-2 text-sm text-gray-700">
-                                  {stateChamado.descricao}
-                                </td>
-                                <td className="p-2 text-sm text-gray-700">
-                                  <StateChamadoTextBox
-                                    statusSituação={
-                                      stateChamado.situacao as SituaçãoProps
-                                    }
-                                  />
-                                </td>
+
+                {!isLoading && (
+                  <>
+                    <div className="bg-gray-50 p-3 rounded-lg">
+                      <div className="flex flex-col space-y-10 mt-11">
+                        <h1 className="sm:text-2xl text-xl font-bold text-zinc-800">
+                          Histórico do chamado
+                        </h1>
+                      </div>
+                      <div className="mt-11">
+                        <div>
+                          <table className="w-full">
+                            <thead className="bg-indigo-600 border-b border-b-gray-300">
+                              <tr>
+                                <th className="font-semibold p-2 text-white text-left">
+                                  data
+                                </th>
+                                <th className="font-semibold p-2 text-white text-left">
+                                  Descrição
+                                </th>
+                                <th className="font-semibold p-2 text-white text-left">
+                                  Situação
+                                </th>
                               </tr>
-                            )
-                          )}
-                        </tbody>
-                      </table>
+                            </thead>
+                            <tbody className="divide-y divide-[#E4E9EB] bg-white">
+                              {chamadosDetails?.data.historico.map(
+                                (stateChamado, i) => (
+                                  <tr key={i}>
+                                    <td className="p-2 text-sm text-gray-700">
+                                      {stateChamado.data}
+                                    </td>
+                                    <td className="p-2 text-sm text-gray-700">
+                                      {stateChamado.descricao}
+                                    </td>
+                                    <td className="p-2 text-sm text-gray-700">
+                                      <StateChamadoTextBox
+                                        statusSituação={
+                                          stateChamado.situacao as SituaçãoProps
+                                        }
+                                      />
+                                    </td>
+                                  </tr>
+                                )
+                              )}
+                            </tbody>
+                          </table>
+                        </div>
+                      </div>
                     </div>
-                  </div>
-                </div>
-              </>
-            )}
-          </div>
-        </div>
+                  </>
+                )}
+              </div>
+            </div>
+          </>
+        )}
+        {/*Ui que somente será exibida caso o usuário seja administrador da aplicação */}
         {permitionAndStateeValidation && (
           <>
             <div className="flex mt-11 border cursor-pointer border-gray-200 bg-white p-5 rounded-lg gap-4 items-center justify-between">
               <div>
-                <Image
-                  src={updateChamadoImage}
+                <img
+                  src="/img/statusUpdate.svg"
                   alt="Update chamado Image"
                   width={300}
                   height={300}
@@ -213,8 +220,7 @@ export function ChamadosDetails({ params }: Props) {
           </>
         )}
       </div>
-      {/*Aqui está o componente que é responsavél por mostrar o modal do adm e fazer a req  */}
-      <UserAdminSettings
+      <Admin
         params={params}
         openModal={openModal}
         setOpenModal={setOpenModal}
@@ -222,4 +228,6 @@ export function ChamadosDetails({ params }: Props) {
       />
     </>
   );
-}
+};
+
+export default ChamadosById;

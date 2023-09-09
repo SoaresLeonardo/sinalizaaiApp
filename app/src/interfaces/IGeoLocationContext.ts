@@ -1,7 +1,7 @@
 export type GeografInfos = {
   geoInfo: {
-    latitudeX: null | string;
-    latitudeY: null | string;
+    latitudeX: null | string | number;
+    latitudeY: null | string | number;
   };
 };
 

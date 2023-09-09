@@ -1,4 +1,4 @@
-import { OptionProps } from './op.type';
+import { OptionProps } from '../type';
 
 export const optionsSituacao: OptionProps[] = [
   {

@@ -1,12 +1,12 @@
 import { FilterSubmit, Props } from './types';
-import { optionsSituacao } from '@/data/options/op.situacao';
 import { MagnifyingGlass } from 'phosphor-react';
-import { OptionProps } from '@/data/options/op.type';
-import { formatFunc } from '@/Utils/dateFormat';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import Combox from '../Combox';
 import Button from '../Button';
+import { optionsSituacao } from '@/constants/options-selected/situacaoChamado-op';
+import { OptionProps } from '@/constants/options-selected/type';
+import { formatDate } from '@/functions/format-date';
 
 export function ChamadosFilter({ setFilter }: Props) {
   // React hook-form
@@ -29,8 +29,8 @@ export function ChamadosFilter({ setFilter }: Props) {
       setFilter((prevFilter) => ({
         ...prevFilter,
         datas: {
-          dataInicial: formatFunc(dataInicial),
-          dataFinal: formatFunc(dataFinal)
+          dataInicial: formatDate(dataInicial),
+          dataFinal: formatDate(dataFinal)
         },
         situacao: comboxSelected?.option.value
       }));

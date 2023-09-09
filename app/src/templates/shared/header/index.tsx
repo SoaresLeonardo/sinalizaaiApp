@@ -1,6 +1,6 @@
+import { UserSkeleton } from '@/components/Skeletons/User';
 import { useAuth } from '@/hooks/auth';
 import { SignOut, User, UserPlus } from 'phosphor-react';
-import { UserSkeleton } from '../Skeletons/User';
 
 export const Header = () => {
   const { user, logout } = useAuth();

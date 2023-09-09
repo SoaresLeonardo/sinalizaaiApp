@@ -1,7 +1,6 @@
 import { Dispatch, SetStateAction, useRef, useState } from 'react';
 import { CheckCircle, X, WarningCircle } from 'phosphor-react';
 import { IChamadoByIdService } from '@/interfaces/chamados/IGetchamados.id.service';
-import { optionsSituacao } from '@/data/options/op.situacao';
 import { UpdateChamado } from '@/services/chamados';
 import { SituaçãoProps } from '@/@types';
 import { OptionProps } from '@/data/options/op.type';
@@ -13,6 +12,7 @@ import StateChamado from '@/components/StateChamado';
 import Input from '@/components/Input';
 import Combox from '@/components/Combox';
 import Button from '@/components/Button';
+import { optionsSituacao } from '@/constants/options-selected/situacaoChamado-op';
 
 type Props = {
   params: {
@@ -23,12 +23,7 @@ type Props = {
   setOpenModal: Dispatch<SetStateAction<boolean>>;
 };
 
-export function UserAdminSettings({
-  params,
-  setOpenModal,
-  openModal,
-  chamado
-}: Props) {
+export function Admin({ params, setOpenModal, openModal, chamado }: Props) {
   const { user } = useAuth();
   // Certificando de que o usuário seja Administrador;
   const permitionUser = user && user.role === 'Administrador' ? true : false;

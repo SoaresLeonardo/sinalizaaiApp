@@ -1,4 +1,4 @@
-import { ChamadosDetails } from '@/components/_ChamadosDetails';
+import ChamadosById from '@/templates/user/auth/chamadoId';
 
 type PageProps = {
   params: {
@@ -6,6 +6,6 @@ type PageProps = {
   };
 };
 
-export default function GetChamadoId({ params }: PageProps) {
-  return <ChamadosDetails params={params} />;
+export default function GetChamadoByIdPage({ params }: PageProps) {
+  return <ChamadosById params={params} />;
 }

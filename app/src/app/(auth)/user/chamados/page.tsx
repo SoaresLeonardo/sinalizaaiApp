@@ -1,5 +1,5 @@
-import { Chamados } from '@/components/_Chamados';
+import Chamados from '@/templates/user/auth/chamados';
 
-export default function UserChamados() {
+export default function ChamadosPage() {
   return <Chamados />;
 }
