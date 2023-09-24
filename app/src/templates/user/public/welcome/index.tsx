@@ -1,10 +1,13 @@
+'use client';
+
 import Link from 'next/link';
+import { ArrowRight } from 'phosphor-react';
 
 const Welcome = () => {
   return (
     <>
       <div className="lg:h-screen flex items-center justify-center">
-        <div className="w-full mx-auto flex flex-col lg:flex-row items-center justify-center lg:gap-28">
+        <div className="w-full mx-auto flex flex-col lg:flex-row items-center justify-center lg:gap-44">
           <div className="w-3xl">
             <div className="space-y-3">
               <h1 className="text-2xl font-semibold">Sinaliza Ai</h1>
@@ -15,8 +18,12 @@ const Welcome = () => {
                 agradável para você. Com a sua colaboração, podemos fazer a
                 diferença e trabalhar juntos para melhorar o mundo!
               </p>
-              <Link href="/signin" className="text-indigo-600 hover:underline">
-                Prosseguir
+              <Link
+                href="/signin"
+                className="text-indigo-600 flex items-center space-x-1 hover:text-yellow-950 transition-colors"
+              >
+                <span>Prosseguir</span>
+                <ArrowRight size={19} />
               </Link>
             </div>
           </div>

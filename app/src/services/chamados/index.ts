@@ -1,3 +1,4 @@
+import { IGetChamadoParamsService } from '@/interfaces/chamados';
 import { api } from '../api';
 
 type Teste = {
@@ -6,12 +7,6 @@ type Teste = {
   latitude: string;
   longitude: string;
   referencia: string;
-};
-
-type ParamProps = {
-  situacao: number | null | undefined;
-  dataInicial: string | undefined;
-  dataFinal: string | undefined;
 };
 
 type UpdateChamado = {
@@ -24,7 +19,7 @@ type UpdateChamado = {
 export async function GetChamados({
   params
 }: {
-  params: ParamProps | undefined;
+  params: IGetChamadoParamsService | undefined;
 }) {
   const response = await api.get(process.env.NEXT_PUBLIC_API_GET_CHAMADOS_URL, {
     params: params

@@ -10,7 +10,7 @@ const Dashboard = () => {
 
   const { isLoaded } = useJsApiLoader({
     id: 'google-map-script',
-    googleMapsApiKey: process.env.NEXT_PUBLIC_API_GOOGLE_API_KEY
+    googleMapsApiKey: ''
   });
 
   // Posição fixa do mapa sobre a geolocalização da cidade

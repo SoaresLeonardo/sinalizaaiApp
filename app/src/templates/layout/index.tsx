@@ -13,7 +13,7 @@ const LayoutAPP = ({ children }: { children: React.ReactNode }) => {
       <div className="min-h-screen grid grid-col-1 lg:grid-cols-6">
         <Sidebar />
         {/* Content */}
-        <div className="col-span-5 bg-gray-50">
+        <div className="col-span-5 bg-gray-100">
           <Header />
           {/* Main Content */}
           <main>{children}</main>

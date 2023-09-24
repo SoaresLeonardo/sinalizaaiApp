@@ -19,10 +19,10 @@ const ActiveLinks = ({ children, href, params, ...props }: Props) => {
     <Link href={href} {...props} passHref legacyBehavior>
       <a
         className={clsx(
-          `flex items-center rounded-md p-3 cursor-pointer transition duration-150 text-base space-x-7`,
+          `flex items-center font-medium rounded-md p-3 cursor-pointer transition duration-150 text-base space-x-7`,
           isCurrentPath
             ? 'bg-indigo-600 text-white'
-            : 'hover:bg-gray-900 hover:text-indigo-500 text-gray-400'
+            : 'hover:bg-gray-100 text-gray-500'
         )}
       >
         {children}

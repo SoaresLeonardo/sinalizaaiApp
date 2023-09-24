@@ -1,4 +1,4 @@
-import { BookOpen, Compass, MapTrifold } from 'phosphor-react';
+import { BookOpen, HandWaving, MapTrifold } from 'phosphor-react';
 import { useSidebar } from '@/hooks/sidebar';
 import { useModal } from '@/hooks/modal';
 
@@ -47,14 +47,14 @@ export const Sidebar = () => {
   return (
     <aside
       className={clsx(
-        `p-3 lg:static w-[80%] col-span-1 fixed top-0 lg:w-full bottom-0 bg-[#0f1217] transition-transform duration-300 overflow-y-scroll z-10`,
+        `p-3 lg:static w-[80%] col-span-1 fixed top-0 lg:w-full bottom-0 bg-white border-r border-r-gray-300 transition-transform duration-300 overflow-y-scroll z-10`,
         open ? '-left-0' : '-left-full'
       )}
     >
       <div className="text-center p-8">
         <h1 className="text-lg font-medium text-indigo-600 flex items-center space-x-2">
-          <Compass size={27} />
-          <span className="text-white">Sinaliza Ai</span>
+          <HandWaving size={27} />
+          <span className="text-zinc-900">Sinaliza Ai</span>
         </h1>
       </div>
       {/* Menu */}
@@ -85,9 +85,9 @@ export const Sidebar = () => {
                 alt="Sidebar Image"
                 className="w-full h-auto"
               />
-              <div className="flex flex-col items-center justify-center text-center bg-[#14181f] space-y-4 px-6 py-11 rounded-xl">
-                <h1 className="font-bold text-white">Algum problema?</h1>
-                <p className="text-gray-500 text-sm">
+              <div className="flex flex-col items-center justify-center text-center bg-gray-200 space-y-4 px-6 py-11 rounded-2xl">
+                <h1 className="font-bold text-zinc-800">Algum problema?</h1>
+                <p className="text-gray-600 text-sm">
                   Abra um chamado para que nossos agentes consigam localizar o
                   problema o mais rápido possivél.
                 </p>

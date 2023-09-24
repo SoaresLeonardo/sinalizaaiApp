@@ -1,17 +1,18 @@
 import { CheckCircle, Spinner, WarningCircle, X } from 'phosphor-react';
 import { IrregularidadeIcon } from '@/components/IrregularidadeIcon';
 import { useGeoLocation } from '@/hooks/geoLocation';
-import { OptionProps } from '@/data/options/op.type';
 import { useMutation } from 'react-query';
 import { PostChamado } from '@/services/chamados';
 import { useModal } from '@/hooks/modal';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { useAuth } from '@/hooks/auth';
 import { Modal } from '@/components/Modal';
 import Button from '@/components/Button';
 import Combox from '@/components/Combox';
 import { GetLocalizationAPI } from '@/services/getLocalization';
 import { optionsIrregularidade } from '@/constants/options-selected/irregularidades-op';
+import { OptionProps } from '@/constants/options-selected/type';
+import Input from '@/components/Input';
 
 export type ErrorProps = {
   msg?: string | null;
@@ -22,6 +23,8 @@ export function User() {
   // Meus states principais
   const { open: openModal, setOpen: setOpenModal } = useModal();
   const { latitudes, setLatitudes } = useGeoLocation();
+  const inputValue = useRef<HTMLInputElement | null>(null);
+  console.log(inputValue.current?.value);
   const { user } = useAuth();
 
   // Checando a role do usuário, caso ela for diferente de 'Cidadão' então o usuário não tem direito de abrir um chamado.
@@ -74,7 +77,7 @@ export function User() {
       latitude: `${latitudes.geoInfo.latitudeX}` || '',
       longitude: `${latitudes.geoInfo.latitudeY}` || '',
       endereco: rua,
-      referencia: 'Teste'
+      referencia: inputValue.current?.value || ''
     };
 
     // Caso o usuário caia nessa condição, possivelmente ele é um administrador ou não tem uma role
@@ -164,12 +167,13 @@ export function User() {
                 </p>
               </div>
               {/*Form*/}
-              <div className="flex flex-col space-y-1">
+              <div className="flex flex-col space-y-5">
                 <Combox
                   selected={selected?.option}
                   setSelected={setSelected}
                   options={optionsIrregularidade}
                 />
+                <Input placeholder="Referência" ref={inputValue} />
               </div>
             </div>
           </div>

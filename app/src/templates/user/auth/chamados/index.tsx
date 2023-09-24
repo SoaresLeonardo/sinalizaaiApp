@@ -13,17 +13,18 @@ import Link from 'next/link';
 const Chamados = () => {
   const [filter, setFilter] = useState<FilterProps | undefined>(undefined);
 
+  const filterObject = {
+    params: {
+      situacao: filter?.situacao,
+      dataInicial: filter?.datas.dataInicial,
+      dataFinal: filter?.datas.dataFinal
+    }
+  };
+
   const { data: chamadosResponse, isLoading } = useQuery<{
     data: IGetChamadosService[];
-  }>(['SinalizaAi.chamados', filter], () =>
-    GetChamados({
-      params: {
-        situacao: filter?.situacao,
-        dataInicial: filter?.datas.dataInicial,
-        dataFinal: filter?.datas.dataFinal
-      }
-    })
-  );
+  }>(['SinalizaAi.chamados', filter], () => GetChamados(filterObject));
+
   return (
     <>
       <div className="max-w-7xl mx-auto w-full lg:px-12 p-6 mt-10">

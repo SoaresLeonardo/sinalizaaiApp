@@ -5,7 +5,7 @@ import { SignOut, User, UserPlus } from 'phosphor-react';
 export const Header = () => {
   const { user, logout } = useAuth();
   return (
-    <header className="p-4 h-16 bg-white">
+    <header className="p-4 h-16 bg-white shadow-md">
       <div className="w-full h-full flex items-center justify-between text-zinc-800">
         <div className="flex items-center space-x-3 cursor-pointer">
           {user ? (

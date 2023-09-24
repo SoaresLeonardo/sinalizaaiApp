@@ -11,6 +11,7 @@ type HistoricoProps = {
   situacao: string;
 };
 
+// Tipagens que serão usadas para mostrar o retorno das informações ao buscar os chamados na API
 export interface IGetChamadosService {
   id: number;
   latitude: string;
@@ -18,6 +19,12 @@ export interface IGetChamadosService {
   tipoIrregularidade: string;
   tipoIrregularidadeDescription: string;
   situacao: SituacoesType;
+}
+// Essas são as tipagens que são usadas; caso o usuário deseja usar algum filtro
+export interface IGetChamadoParamsService {
+  situacao: number | null | undefined;
+  dataInicial: string | undefined;
+  dataFinal: string | undefined;
 }
 
 export interface IChamadoByIdService {
